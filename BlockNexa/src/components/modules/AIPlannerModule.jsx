@@ -402,15 +402,15 @@ export default function AIPlannerModule({
                 </span>
               </div>
 
-              <div className="p-3 rounded-lg bg-slate-950 font-mono text-[11px] text-purple-300 border border-slate-800">
-                max [ α·RiskReduction + β·AssetAvailability ] - [ γ·Delay + δ·Duration ]
+              <div className="p-3 rounded-lg bg-slate-950 font-mono text-[11px] sm:text-xs text-purple-200 border border-slate-800 overflow-x-auto">
+                max Z = λ₁ ∑_(i,t) [ P_i · u_i,t ] + λ₂ ∑_(i&lt;j) [ C_i,j · b_i,j ] - λ₃ ∑_r [ V_r · δ_r ] - λ₄ ∑_(k,t) [ y_k,t ]
               </div>
 
-              {/* Weight sliders interactive */}
+              {/* Pareto Tuning Weights interactive */}
               <div className="space-y-3 bg-slate-950/80 p-4 rounded-xl border border-slate-800">
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-300 font-medium">Defect Severity & Safety Risk Weight (α)</span>
+                    <span className="text-slate-300 font-medium">Risk Reduction Weight (λ₁ · ∑ P_i · u_i,t)</span>
                     <span className="text-purple-400 font-mono font-bold">{weights.severity}%</span>
                   </div>
                   <input
@@ -425,23 +425,23 @@ export default function AIPlannerModule({
 
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-300 font-medium">Track Quality Index (TQI) / Asset Health (β)</span>
-                    <span className="text-blue-400 font-mono font-bold">{weights.tqi}%</span>
+                    <span className="text-slate-300 font-medium">Bundling Synergy Weight (λ₂ · ∑ C_i,j · b_i,j)</span>
+                    <span className="text-amber-400 font-mono font-bold">{weights.multiDeptSynergy}%</span>
                   </div>
                   <input
                     type="range"
-                    min="10"
+                    min="5"
                     max="40"
-                    value={weights.tqi}
-                    onChange={(e) => setWeights({ ...weights, tqi: Number(e.target.value) })}
-                    className="w-full accent-blue-500 cursor-pointer"
+                    value={weights.multiDeptSynergy}
+                    onChange={(e) => setWeights({ ...weights, multiDeptSynergy: Number(e.target.value) })}
+                    className="w-full accent-amber-500 cursor-pointer"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-300 font-medium">Traffic Density & Delay Penalty Weight (γ)</span>
-                    <span className="text-emerald-400 font-mono font-bold">{weights.trafficHeadway}%</span>
+                    <span className="text-slate-300 font-medium">Train Delay Penalty Weight (λ₃ · ∑ V_r · δ_r)</span>
+                    <span className="text-red-400 font-mono font-bold">{weights.trafficHeadway}%</span>
                   </div>
                   <input
                     type="range"
@@ -449,22 +449,22 @@ export default function AIPlannerModule({
                     max="40"
                     value={weights.trafficHeadway}
                     onChange={(e) => setWeights({ ...weights, trafficHeadway: Number(e.target.value) })}
-                    className="w-full accent-emerald-500 cursor-pointer"
+                    className="w-full accent-red-500 cursor-pointer"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-300 font-medium">Multi-Department Bundling Synergy Weight (δ)</span>
-                    <span className="text-amber-400 font-mono font-bold">{weights.multiDeptSynergy}%</span>
+                    <span className="text-slate-300 font-medium">Possession Footprint Weight (λ₄ · ∑ y_k,t)</span>
+                    <span className="text-blue-400 font-mono font-bold">{weights.tqi}%</span>
                   </div>
                   <input
                     type="range"
                     min="5"
                     max="30"
-                    value={weights.multiDeptSynergy}
-                    onChange={(e) => setWeights({ ...weights, multiDeptSynergy: Number(e.target.value) })}
-                    className="w-full accent-amber-500 cursor-pointer"
+                    value={weights.tqi}
+                    onChange={(e) => setWeights({ ...weights, tqi: Number(e.target.value) })}
+                    className="w-full accent-blue-500 cursor-pointer"
                   />
                 </div>
               </div>

@@ -31,6 +31,7 @@ export const MODULES = [
   { id: 'gantt', label: '4. Master Schedule', icon: CalendarDays, badge: '3 Horizons' },
   { id: 'safety', label: '5. Safety & Sanction', icon: ShieldCheck, badge: 'BDMS' },
   { id: 'simulation', label: '6. Re-planner & Audit', icon: SlidersHorizontal, badge: 'Rolling' },
+  { id: 'advanced', label: '7. Advanced AI', icon: Sparkles, badge: '6 Value-Adds', badgeColor: 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-sm' },
   { id: 'conflicts', label: 'Conflict Center', icon: AlertTriangle, badge: '3 Alerts', badgeColor: 'bg-red-500 text-white' },
   { id: 'impact', label: 'Train Impact', icon: TrainTrack, badge: 'COA' },
 ];
@@ -44,6 +45,7 @@ export const WORKFLOW_STEPS = [
   { id: 'gantt', label: '4. Master Schedule', module: 'gantt' },
   { id: 'safety', label: '5. Safety & Sanction', module: 'safety' },
   { id: 'simulation', label: '6. Re-planner & Audit', module: 'simulation' },
+  { id: 'advanced', label: '7. Advanced Capabilities', module: 'advanced' },
 ];
 
 export default function Header({

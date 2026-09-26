@@ -34,6 +34,7 @@ import {
   Waves,
 } from 'lucide-react';
 import { HUGGINGFACE_DATASET_META } from '../../data/huggingfaceMaintenanceData';
+import { calculateCPI, fetchDegradationTrajectory } from '../../services/api';
 
 export default function MaintenanceRequestsModule({
   requests,
@@ -49,6 +50,36 @@ export default function MaintenanceRequestsModule({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inspectingCpiReq, setInspectingCpiReq] = useState(null);
   const [inspectingHfTelemetryReq, setInspectingHfTelemetryReq] = useState(null);
+
+  // Mathematical Asset Degradation & CPI Calculator State
+  const [showCpiCalculator, setShowCpiCalculator] = useState(true);
+  const [cpiInputs, setCpiInputs] = useState({
+    severity: 0.85,
+    overdue_days: 14.0,
+    asset_criticality: 1.0,
+    gmt: 420.0,
+    max_gmt: 650.0,
+    tau: 7.0,
+    w1: 0.35,
+    w2: 0.25,
+    w3: 0.25,
+    w4: 0.15,
+    gmt_daily: 0.18,
+    sigma_weather: 12.0
+  });
+  const [cpiOutput, setCpiOutput] = useState(null);
+  const [degradationTrajectory, setDegradationTrajectory] = useState([]);
+
+  React.useEffect(() => {
+    calculateCPI(cpiInputs).then(setCpiOutput);
+    fetchDegradationTrajectory({
+      max_days: 90,
+      gmt_daily: cpiInputs.gmt_daily,
+      sigma_weather: cpiInputs.sigma_weather
+    }).then((res) => {
+      if (res && res.trajectory) setDegradationTrajectory(res.trajectory);
+    });
+  }, [cpiInputs.severity, cpiInputs.overdue_days, cpiInputs.asset_criticality, cpiInputs.gmt, cpiInputs.w1, cpiInputs.w2, cpiInputs.w3, cpiInputs.w4]);
 
   // Form state for new request modal
   const [newDept, setNewDept] = useState('Engineering (TMS)');
@@ -239,6 +270,14 @@ export default function MaintenanceRequestsModule({
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setShowCpiCalculator(!showCpiCalculator)}
+            className="px-4 py-2 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-700/60 text-purple-300 text-xs font-bold flex items-center gap-2 shadow-md transition cursor-pointer"
+          >
+            <BarChart3 className="w-4 h-4 text-purple-400" />
+            <span>{showCpiCalculator ? 'Hide CPI Kinetics' : 'CPI & Asset Degradation Formulation'}</span>
+          </button>
+
+          <button
             onClick={() => setIsModalOpen(true)}
             className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-md hover:shadow-blue-900/30 transition cursor-pointer"
           >
@@ -257,6 +296,167 @@ export default function MaintenanceRequestsModule({
           )}
         </div>
       </div>
+
+      {/* Interactive Asset Degradation & Composite Priority Scoring (CPI) Mathematical Formulator */}
+      {showCpiCalculator && (
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-purple-950/70 via-slate-900 to-indigo-950/70 border border-purple-500/40 shadow-2xl space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-purple-900/40 pb-3">
+            <div>
+              <span className="text-xs font-mono font-bold text-purple-400 uppercase tracking-wider">
+                Mathematical Model • Degradation Kinetics & Simplex CPI
+              </span>
+              <h2 className="text-base font-bold text-white flex items-center gap-2 mt-0.5">
+                <BarChart3 className="w-4 h-4 text-purple-400" />
+                <span>Asset Degradation (Weibull & TQI) & Composite Priority Scoring (CPI)</span>
+              </h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-700/50">
+                Simplex: Σ w_m = 1
+              </span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                β = 2.4 | η = 500 GMT
+              </span>
+            </div>
+          </div>
+
+          {/* Formulas Display */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider font-mono">
+                A. Non-Linear Asset Degradation Model
+              </span>
+              <div className="font-mono text-xs text-cyan-200">
+                H(gmt) = (gmt / 500)^2.4 &nbsp;|&nbsp; TQI(t) = TQI₀ · exp( κ · (GMT_daily · t) / (1 + ω · σ_weather) )
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider font-mono">
+                B. Composite Priority Index (CPI) Formulation
+              </span>
+              <div className="font-mono text-xs text-purple-200">
+                CPI_i = w₁·S_i + w₂·[1 - exp(-Δt_i / 7)] + w₃·C_i^asset + w₄·(GMT_i / 650)
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Sliders for CPI variables */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-950/80 border border-slate-800">
+            <div>
+              <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                Defect Severity S_i: <strong className="text-white">{(cpiInputs.severity * 10).toFixed(1)} / 10</strong>
+              </label>
+              <input
+                type="range"
+                min="0.1"
+                max="1.0"
+                step="0.05"
+                value={cpiInputs.severity}
+                onChange={(e) => setCpiInputs({ ...cpiInputs, severity: parseFloat(e.target.value) })}
+                className="w-full accent-purple-500 cursor-pointer"
+              />
+              <span className="text-[10px] text-slate-500">Weight w₁ = {cpiInputs.w1}</span>
+            </div>
+
+            <div>
+              <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                Days Overdue Δt: <strong className="text-white">{cpiInputs.overdue_days} days</strong>
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="30"
+                step="1"
+                value={cpiInputs.overdue_days}
+                onChange={(e) => setCpiInputs({ ...cpiInputs, overdue_days: parseFloat(e.target.value) })}
+                className="w-full accent-purple-500 cursor-pointer"
+              />
+              <span className="text-[10px] text-slate-500">Decay τ = 7.0d (w₂ = {cpiInputs.w2})</span>
+            </div>
+
+            <div>
+              <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                Asset Criticality C_i: <strong className="text-white">{cpiInputs.asset_criticality >= 1 ? '1.0 (Crossover)' : cpiInputs.asset_criticality >= 0.8 ? '0.8 (Mainline)' : '0.3 (Loop)'}</strong>
+              </label>
+              <input
+                type="range"
+                min="0.3"
+                max="1.0"
+                step="0.1"
+                value={cpiInputs.asset_criticality}
+                onChange={(e) => setCpiInputs({ ...cpiInputs, asset_criticality: parseFloat(e.target.value) })}
+                className="w-full accent-purple-500 cursor-pointer"
+              />
+              <span className="text-[10px] text-slate-500">Weight w₃ = {cpiInputs.w3}</span>
+            </div>
+
+            <div>
+              <label className="text-[11px] font-semibold text-slate-400 block mb-1">
+                Cumulative GMT: <strong className="text-white">{cpiInputs.gmt} GMT</strong>
+              </label>
+              <input
+                type="range"
+                min="100"
+                max="650"
+                step="25"
+                value={cpiInputs.gmt}
+                onChange={(e) => setCpiInputs({ ...cpiInputs, gmt: parseFloat(e.target.value) })}
+                className="w-full accent-purple-500 cursor-pointer"
+              />
+              <span className="text-[10px] text-slate-500">Max = 650 GMT (w₄ = {cpiInputs.w4})</span>
+            </div>
+          </div>
+
+          {/* Live Calculated Output & Breakdown */}
+          {cpiOutput && (
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              <div className="p-3.5 rounded-xl bg-purple-950/60 border border-purple-700/60 flex flex-col justify-center sm:col-span-1">
+                <span className="text-[10px] font-bold uppercase text-purple-300">Composite CPI</span>
+                <div className="text-2xl font-mono font-extrabold text-white mt-0.5">
+                  {cpiOutput.cpi_score}
+                </div>
+                <span
+                  className={`mt-1 text-[10px] font-bold px-2 py-0.5 rounded w-fit ${
+                    cpiOutput.priority_class === 'CRITICAL'
+                      ? 'bg-red-900/60 text-red-200 border border-red-700'
+                      : 'bg-amber-900/60 text-amber-200 border border-amber-700'
+                  }`}
+                >
+                  {cpiOutput.priority_class}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:col-span-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div>
+                  <span className="text-slate-500 block text-[10px]">w₁ · Severity</span>
+                  <span className="font-mono text-cyan-300 font-bold">
+                    +{(cpiOutput.components.severity_term * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">w₂ · Overdue Urgency</span>
+                  <span className="font-mono text-purple-300 font-bold">
+                    +{(cpiOutput.components.overdue_term * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">w₃ · Asset Criticality</span>
+                  <span className="font-mono text-indigo-300 font-bold">
+                    +{(cpiOutput.components.asset_criticality_term * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px]">w₄ · GMT Tonnage</span>
+                  <span className="font-mono text-emerald-300 font-bold">
+                    +{(cpiOutput.components.tonnage_term * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Open Source Hugging Face Dataset Attribution & Telemetry Pipeline Banner */}
       <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-950/70 via-slate-900 to-indigo-950/70 border border-blue-500/40 shadow-xl space-y-3">
@@ -998,6 +1198,116 @@ export default function MaintenanceRequestsModule({
                 className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition cursor-pointer"
               >
                 Close Telemetry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Explainable CPI Mathematical Formulation Modal */}
+      {inspectingCpiReq && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-purple-500/50 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-purple-950/80 border border-purple-700/60 text-purple-400">
+                  <BarChart3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-purple-400 uppercase">
+                      {inspectingCpiReq.id}
+                    </span>
+                    <span className="text-sm font-bold text-white">
+                      Composite Priority Index (CPI) Formulation
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">{inspectingCpiReq.defect}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setInspectingCpiReq(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Formula display */}
+            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-purple-200">
+              CPI_i = w₁·S_i + w₂·[1 - exp(-Δt_i / τ)] + w₃·C_i^asset + w₄·(GMT_i / max_GMT)
+            </div>
+
+            {/* 4 Components breakdown */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <span className="text-slate-500 font-semibold uppercase text-[10px] block">
+                  1. Defect Severity (w₁ = 0.35)
+                </span>
+                <div className="text-sm font-bold text-cyan-300 font-mono">
+                  S_i = {inspectingCpiReq.severity === 'Emergency' ? '0.98' : inspectingCpiReq.severity === 'Critical' ? '0.88' : inspectingCpiReq.severity === 'Major' ? '0.72' : '0.45'}
+                </div>
+                <p className="text-[11px] text-slate-400">Technical USFD flaw size / point throw drift rating.</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <span className="text-slate-500 font-semibold uppercase text-[10px] block">
+                  2. Overdue Saturation (w₂ = 0.25)
+                </span>
+                <div className="text-sm font-bold text-purple-300 font-mono">
+                  Δt = {inspectingCpiReq.overdueDays || 12} days past limit
+                </div>
+                <p className="text-[11px] text-slate-400">Urgency decay constant τ = 7.0 days for mainline corridor.</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <span className="text-slate-500 font-semibold uppercase text-[10px] block">
+                  3. Topological Criticality (w₃ = 0.25)
+                </span>
+                <div className="text-sm font-bold text-indigo-300 font-mono">
+                  C_i^asset = {inspectingCpiReq.line?.includes('Main') ? '0.80 (Mainline)' : '1.0 (Crossover / Diamond)'}
+                </div>
+                <p className="text-[11px] text-slate-400">High speed mainline track carrying Rajdhani & Shatabdi.</p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <span className="text-slate-500 font-semibold uppercase text-[10px] block">
+                  4. Corridor Tonnage Exposure (w₄ = 0.15)
+                </span>
+                <div className="text-sm font-bold text-emerald-300 font-mono">
+                  GMT = 420 / 650 (64.6% max GMT)
+                </div>
+                <p className="text-[11px] text-slate-400">Cumulative Gross Million Tonnes traffic loading.</p>
+              </div>
+            </div>
+
+            {/* Asset Degradation Kinetics */}
+            <div className="p-3 rounded-xl bg-slate-950 border border-purple-900/40 text-xs flex items-center justify-between">
+              <div>
+                <span className="text-slate-400 block text-[10px] uppercase font-semibold">Weibull Hazard H(gmt) & TQI</span>
+                <span className="font-mono text-purple-300 font-bold">H(420) = 0.354 • TQI(t) = 3.42 mm (Alert Threshold)</span>
+              </div>
+              <div className="text-right">
+                <span className="text-slate-400 block text-[10px] uppercase font-semibold">Net Composite Score</span>
+                <span className="text-lg font-mono font-extrabold text-white">{inspectingCpiReq.priorityScore}</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-end gap-3 border-t border-slate-800">
+              <button
+                onClick={() => setInspectingCpiReq(null)}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition cursor-pointer"
+              >
+                Close Formulation
+              </button>
+              <button
+                onClick={() => {
+                  toggleSelect(inspectingCpiReq.id);
+                  setInspectingCpiReq(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition cursor-pointer"
+              >
+                {selectedRequestIds.includes(inspectingCpiReq.id) ? 'Deselect from Plan' : 'Select for MILP Bundling'}
               </button>
             </div>
           </div>

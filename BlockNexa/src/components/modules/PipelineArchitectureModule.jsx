@@ -358,64 +358,209 @@ export default function PipelineArchitectureModule({ onNavigate }) {
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl space-y-6">
             <div>
               <h2 className="text-lg font-bold text-white">
-                Mathematical Formulations & System Schemas
+                Complete Mathematical Formulation & OR Schemas
               </h2>
               <p className="text-xs text-slate-400 mt-1">
-                Rigorous operational research models governing BlockNexa's AI decision engine.
+                Rigorous operational research models governing BlockNexa's AI decision engine across asset degradation kinetics, multi-objective optimization, and real-time execution.
               </p>
             </div>
 
-            {/* Formula 1: Linear Referencing */}
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">
-                1. Linear Referencing Synchronization Tuple
-              </span>
-              <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-cyan-300 border border-slate-800 overflow-x-auto">
-                Asset Location = (Division, Line Code, Chainage km Start, Chainage km End)
+            {/* Section 1: Asset Degradation & Composite Priority Scoring (CPI) */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                <span>1. Asset Degradation & Composite Priority Scoring (CPI)</span>
+              </h3>
+
+              {/* 1A: Non-Linear Asset Degradation Model */}
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-cyan-300 uppercase tracking-wider font-mono">
+                    A. Non-Linear Asset Degradation Model (Weibull & TQI Kinetics)
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+                    β &gt; 1 Accelerated Wear
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-cyan-200 border border-slate-800 overflow-x-auto space-y-2">
+                  <div>H(gmt) = ( gmt / η )^β</div>
+                  <div className="text-purple-300">
+                    TQI(t) = TQI₀ · exp( κ · (GMT_daily · t) / (1 + ω · σ_weather) )
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs text-slate-400">
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-cyan-300">H(gmt):</strong> Cumulative Weibull hazard over Gross Million Tonnes (GMT). Shape factor β = 2.4, Scale η = 500 GMT.
+                  </div>
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-purple-300">TQI(t):</strong> Instantaneous Track Quality Index standard deviation (alignment, twist, longitudinal level).
+                  </div>
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-amber-300">σ_weather:</strong> Ambient rail temperature excess over neutral continuous welded rail (CWR) buckling limits.
+                  </div>
+                </div>
               </div>
-              <p className="text-xs text-slate-400">
-                Example: <code>(BSL, DN-MAIN, 284.2, 286.03)</code> links overlapping work zones regardless of department-specific naming schemes.
-              </p>
+
+              {/* 1B: Composite Priority Index (CPI) Formulation */}
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-wider font-mono">
+                    B. Composite Priority Index (CPI) Formulation
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
+                    Simplex: Σ w_m = 1, w_m &gt; 0
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-purple-200 border border-slate-800 overflow-x-auto">
+                  CPI_i = w₁ · S_i + w₂ · [ 1 - exp( -Δt_i^overdue / τ ) ] + w₃ · C_i^asset + w₄ · ( GMT_i / max_GMT )
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1 text-xs">
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-purple-300 block">w₁ = 0.35 (Severity S_i):</strong> Raw defect score ∈ [0, 1] (USFD flaw size, point throw resistance).
+                  </div>
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-purple-300 block">w₂ = 0.25 (Overdue Δt):</strong> Exponential saturation with decay constant τ = 7.0 days past safety deadline.
+                  </div>
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-purple-300 block">w₃ = 0.25 (Criticality C_i):</strong> Crossovers = 1.0, Mainline = 0.8, Yard loops = 0.3.
+                  </div>
+                  <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
+                    <strong className="text-purple-300 block">w₄ = 0.15 (GMT Ratio):</strong> Normalized cumulative tonnage exposure ratio (GMT / max_GMT).
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Formula 2: Composite Priority Index (CPI) */}
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-xs font-bold text-purple-400 uppercase tracking-wider font-mono">
-                2. Composite Priority Index (CPI)
-              </span>
-              <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-purple-300 border border-slate-800 overflow-x-auto">
-                CPI = w1 · S_defect + w2 · D_overdue + w3 · C_asset + w4 · T_traffic
+            {/* Section 2: Multi-Objective Mixed-Integer Linear Program (MILP) */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+                <span>2. Multi-Objective Mixed-Integer Linear Program (MILP)</span>
+              </h3>
+
+              {/* MILP Objective Function */}
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider font-mono">
+                    MILP Multi-Objective Function (Pareto Normalized)
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                    SciPy HiGHS Solver
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-emerald-200 border border-slate-800 overflow-x-auto leading-relaxed">
+                  max Z = λ₁ ∑_(i,t) [ P_i · u_i,t ] + λ₂ ∑_(i&lt;j) [ C_i,j · b_i,j ] - λ₃ ∑_r [ V_r · δ_r ] - λ₄ ∑_(k,t) [ y_k,t ]
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                  <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                    <strong className="text-emerald-400">λ₁ · Risk:</strong> Maximizes prioritized defect risk elimination (P_i = CPI_i).
+                  </div>
+                  <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                    <strong className="text-blue-400">λ₂ · Bundling:</strong> Maximizes compatible possession co-location (C_i,j · b_i,j).
+                  </div>
+                  <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                    <strong className="text-red-400">λ₃ · Delay:</strong> Minimizes weighted train regulation (V_r = 10 for Rajdhani, 5 Express).
+                  </div>
+                  <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                    <strong className="text-purple-400">λ₄ · Possession:</strong> Minimizes physical track block footprint across corridor segments.
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1 text-xs">
-                <div className="p-2 rounded bg-slate-900 border border-slate-800/80">
-                  <strong className="text-purple-300">w1 = 0.40:</strong> Technical defect severity (IMR flaws, cant deficiency)
+
+              {/* MILP 8 Operational Constraints */}
+              <div className="space-y-3">
+                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                  Exact Operational Constraints Formulated & Solved:
+                </span>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">1. Task Duration & Persistence:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      u_i,t = ∑_(τ = max(1, t - D_i + 1))^t x_i,τ, ∀ i ∈ ℐ, ∀ t ∈ 𝒯
+                    </div>
+                    <p className="text-[11px] text-slate-400">State variable u_i,t remains 1 continuously across task duration D_i once started.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">2. Non-Preemption & Single Execution:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      ∑_(t ∈ 𝒯) x_i,t ≤ 1, ∀ i ∈ ℐ
+                    </div>
+                    <p className="text-[11px] text-slate-400">Tasks execute at most once and cannot be interrupted mid-way.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">3. Spatial Possession Coupling:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      u_i,t ≤ y_k,t, ∀ i ∈ ℐ, ∀ t ∈ 𝒯, ∀ k ∈ [k_i^start, k_i^end]
+                    </div>
+                    <p className="text-[11px] text-slate-400">Track block y_k,t must be active whenever task i overlaps segment k.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">4. Incompatible Task Separation:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      u_i,t + u_j,t ≤ 1 + C_i,j, ∀ (i, j) overlapping spatially
+                    </div>
+                    <p className="text-[11px] text-slate-400">Conflicting activities (e.g. live TRD inspection vs swinging BCM boom) cannot run simultaneously.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">5. Pairwise Bundling Definition:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      b_i,j ≤ ½ ( ∑_(t ∈ 𝒯) u_i,t · u_j,t ), ∀ i, j ∈ ℐ
+                    </div>
+                    <p className="text-[11px] text-slate-400">Bundling reward b_i,j activates only when tasks share the same possession window.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">6. Specialized Machinery Limits:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      ∑_(i ∈ ℐ_m) u_i,t ≤ O_m, ∀ m ∈ ℳ, ∀ t ∈ 𝒯
+                    </div>
+                    <p className="text-[11px] text-slate-400">Concurrent work is bounded by available BCM, CSM, and Tower Wagon machines O_m.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">7. Traction Sub-Sector Isolation:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      u_i,t ≤ y_k',t, ∀ k' ∈ ℰ(i), ∀ t ∈ 𝒯
+                    </div>
+                    <p className="text-[11px] text-slate-400">TRD power shut-offs automatically isolate adjacent feeding post sub-sectors.</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                    <strong className="text-cyan-300 font-mono">8. Train Path Collision & Delay Coupling:</strong>
+                    <div className="font-mono text-[11px] text-slate-300 bg-slate-900 p-1.5 rounded">
+                      δ_r ≥ Δt_slot ∑_(t) ( y_k,t · A_r,k,t ) - Slack_r, ∀ r ∈ ℛ
+                    </div>
+                    <p className="text-[11px] text-slate-400">Quantifies train regulation minutes δ_r offset by timetable recovery slack.</p>
+                  </div>
                 </div>
-                <div className="p-2 rounded bg-slate-900 border border-slate-800/80">
-                  <strong className="text-purple-300">w2 = 0.25:</strong> Time elapsed past regulatory deadline
-                </div>
-                <div className="p-2 rounded bg-slate-900 border border-slate-800/80">
-                  <strong className="text-purple-300">w3 = 0.20:</strong> Criticality index of asset (Mainline vs loop line)
-                </div>
-                <div className="p-2 rounded bg-slate-900 border border-slate-800/80">
-                  <strong className="text-purple-300">w4 = 0.15:</strong> Section throughput (GMT/day and peak passenger density)
-                </div>
-              </div>
-              <div className="p-2 rounded bg-red-950/40 border border-red-900/40 text-xs text-red-300">
-                <strong>Hard Safety Rule:</strong> Safety-critical defects (e.g. Neutral Section Arc Flashover) bypass batch schedules and route directly to the Emergency Corridor Intervention Queue.
               </div>
             </div>
 
-            {/* Formula 3: MILP / CP-SAT Objective Function */}
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider font-mono">
-                3. Mixed-Integer Linear Programming (MILP) Objective Function
-              </span>
-              <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-emerald-300 border border-slate-800 overflow-x-auto">
-                max [ α · RiskReduction + β · AssetAvailability ] - [ γ · PunctualityDegradation + δ · PossessionDuration ]
+            {/* Section 3: Value-Adds Banner */}
+            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div>
+                <strong className="text-white block font-bold text-sm">
+                  Cutting-Edge Value-Add Capabilities Integrated
+                </strong>
+                <p className="text-slate-300 text-xs mt-0.5">
+                  1. SLW Simulator • 2. Counterfactual XAI • 3. Green ESG Traction • 4. CTMC Digital Twin • 5. Offline BLE Token • 6. Shadow Block Opportunism
+                </p>
               </div>
-              <p className="text-xs text-slate-400">
-                Subject to: Work train turnaround times, power shut-off switching intervals (18 mins), material/crew availability, mandatory minimum headway gaps (15 mins), and safety clearing margins.
-              </p>
+              <button
+                onClick={() => onNavigate('advanced')}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer transition shrink-0"
+              >
+                Open Capabilities Hub
+              </button>
             </div>
           </div>
         </div>

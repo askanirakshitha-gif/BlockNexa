@@ -38,7 +38,6 @@ export async function predictDefectRisk(payload) {
     return await res.json();
   } catch (err) {
     console.warn('[BlockNexa API] Predict risk failed, falling back:', err.message);
-    // Client-side fallback calculation
     const score = Math.min(100, Math.round(
       0.35 * (payload.severity * 10) +
       0.30 * (payload.safety_criticality * 10) +
@@ -153,6 +152,189 @@ export async function fetchBlockHistory() {
     return await res.json();
   } catch (err) {
     console.warn('[BlockNexa API] Fetch block history failed:', err.message);
+    return [];
+  }
+}
+
+// =====================================================================
+// Complete Mathematical Formulation & Cutting-Edge Value-Adds API
+// =====================================================================
+
+/**
+ * 1. Composite Priority Index (CPI) Formulation
+ */
+export async function calculateCPI(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/cpi-calculate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] calculateCPI failed, fallback:', err.message);
+    const s = payload.severity ?? 0.85;
+    const od = payload.overdue_days ?? 14;
+    const ca = payload.asset_criticality ?? 1.0;
+    const gmt = payload.gmt ?? 420;
+    const w1 = 0.35, w2 = 0.25, w3 = 0.25, w4 = 0.15;
+    const overdueTerm = 1 - Math.exp(-od / 7);
+    const score = w1 * s + w2 * overdueTerm + w3 * ca + w4 * (gmt / 650);
+    return {
+      cpi_score: Math.round(score * 1000) / 1000,
+      cpi_percent: Math.round(score * 1000) / 10,
+      priority_class: score >= 0.75 ? 'CRITICAL' : score >= 0.55 ? 'HIGH' : 'MEDIUM',
+      components: {
+        severity_term: w1 * s,
+        overdue_term: w2 * overdueTerm,
+        asset_criticality_term: w3 * ca,
+        tonnage_term: w4 * (gmt / 650)
+      },
+      weights: { w1_severity: w1, w2_overdue: w2, w3_criticality: w3, w4_gmt: w4 }
+    };
+  }
+}
+
+/**
+ * 1A. Non-Linear Asset Degradation & Weibull / TQI Kinetics
+ */
+export async function fetchDegradationTrajectory(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/degradation-trajectory`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] fetchDegradationTrajectory failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * 2. Multi-Objective Mixed-Integer Linear Program (MILP) Solver
+ */
+export async function solveMILP(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/milp-solve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] solveMILP failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Feature 1: Dynamic Single Line Working (SLW) Bi-Directional Simulator
+ */
+export async function simulateSLW(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/slw-simulate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] simulateSLW failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Feature 2: Counterfactual XAI Controller Decision Cards (SHAP & Counterfactuals)
+ */
+export async function fetchXAIExplanation(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/xai-explain`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] fetchXAIExplanation failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Feature 3: Green Traction Energy & Carbon Minimization (ESG Optimizer)
+ */
+export async function optimizeESG(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/esg-optimize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] optimizeESG failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Feature 4: Digital Twin Track Deformation Forecast (Auto-TSR Imposer)
+ */
+export async function forecastCTMC(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/ctmc-forecast`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] forecastCTMC failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Feature 5: Offline-First Edge-Mesh Digital Token System (PWI / SI Mobile Sign-off)
+ */
+export async function generateOfflineToken(payload = {}) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/offline-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] generateOfflineToken failed:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Feature 6: Predictive Shadow Possession Opportunism
+ */
+export async function fetchShadowPossessions() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/math/shadow-possessions`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] fetchShadowPossessions failed:', err.message);
     return [];
   }
 }
