@@ -103,9 +103,9 @@ export default function TrainImpactModule({ onNavigate }) {
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
             <span className="font-semibold uppercase tracking-wider">Punctuality Score</span>
-            <TrendingDown className="w-4 h-4 text-purple-400" />
+            <TrendingDown className="w-4 h-4 text-blue-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-purple-300">
+          <div className="text-2xl font-bold font-mono text-blue-300">
             98.2%
           </div>
           <p className="text-[11px] text-slate-500 mt-1">
@@ -186,7 +186,7 @@ export default function TrainImpactModule({ onNavigate }) {
                     onClick={() => handleActionChange(train.trainNo, 'REROUTE_LOOP')}
                     className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition cursor-pointer ${
                       train.selectedAction === 'REROUTE_LOOP'
-                        ? 'bg-purple-600 text-white border-purple-400 shadow-sm'
+                        ? 'bg-blue-600 text-white border-blue-400 shadow-sm'
                         : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
                     }`}
                   >
@@ -197,7 +197,7 @@ export default function TrainImpactModule({ onNavigate }) {
                     onClick={() => handleActionChange(train.trainNo, 'HOLD_JUNCTION')}
                     className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition cursor-pointer ${
                       train.selectedAction === 'HOLD_JUNCTION'
-                        ? 'bg-blue-600 text-white border-blue-400 shadow-sm'
+                        ? 'bg-amber-600 text-white border-amber-400 shadow-sm'
                         : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
                     }`}
                   >

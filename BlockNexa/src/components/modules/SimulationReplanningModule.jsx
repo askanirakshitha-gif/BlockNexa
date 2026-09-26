@@ -159,7 +159,7 @@ export default function SimulationReplanningModule({ onNavigate }) {
           {/* Live COA Divergence Feed Alerts */}
           <div className="space-y-3">
             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-rose-500 ring-2 ring-rose-500/20" />
               <span>Real-Time Divergence Events from COA & FOIS</span>
             </h3>
 
@@ -303,7 +303,7 @@ export default function SimulationReplanningModule({ onNavigate }) {
 
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
                 <span className="text-slate-400 block mb-1">Trains Affected:</span>
-                <span className="text-xl font-mono font-bold text-purple-400">
+                <span className="text-xl font-mono font-bold text-blue-400">
                   {simResults.after.trainsAffected} Trains
                 </span>
                 <span className="text-[10px] text-slate-500 block">Down from {simResults.before.trainsAffected} trains</span>
@@ -384,7 +384,7 @@ export default function SimulationReplanningModule({ onNavigate }) {
                     </div>
                     <div className="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                        className="h-full bg-blue-600 rounded-full"
                         style={{ width: `${(blk.elapsedMins / blk.allocatedMins) * 100}%` }}
                       />
                     </div>
@@ -484,10 +484,10 @@ export default function SimulationReplanningModule({ onNavigate }) {
                     </div>
                   </div>
 
-                  {/* AI Learning Feedback */}
-                  <div className="p-2.5 rounded-lg bg-purple-950/20 border border-purple-800/40 text-xs text-purple-200 flex items-start gap-2">
-                    <Sparkles className="w-4 h-4 text-yellow-300 shrink-0 mt-0.5" />
-                    <span><strong>AI Model Optimization Feedback:</strong> {log.aiFeedbackNote}</span>
+                  {/* Model Learning Feedback */}
+                  <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                    <span><strong>Optimization Engine Feedback:</strong> {log.aiFeedbackNote}</span>
                   </div>
                 </div>
               ))}

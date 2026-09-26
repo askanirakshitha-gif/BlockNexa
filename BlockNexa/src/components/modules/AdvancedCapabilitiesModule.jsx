@@ -157,7 +157,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-gradient-to-r from-purple-900 to-indigo-900 text-purple-300 border border-purple-700/50">
+            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-700/50">
               Module 07 • ADVANCED CAPABILITIES
             </span>
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">
@@ -175,7 +175,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => onNavigate('planner')}
-            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-purple-900/40"
+            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-sm"
           >
             <Cpu className="w-3.5 h-3.5" />
             <span>Open MILP Optimizer</span>
@@ -189,7 +189,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           onClick={() => setActiveTab('ALL')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'ALL'
-              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -201,7 +201,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           onClick={() => setActiveTab('SLW')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'SLW'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -214,20 +214,20 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           onClick={() => setActiveTab('XAI')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'XAI'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+          <Sparkles className="w-3.5 h-3.5 text-blue-400" />
           <span>2. Counterfactual XAI</span>
-          <span className="text-[10px] px-1 rounded bg-indigo-950 text-indigo-300">SHAP</span>
+          <span className="text-[10px] px-1 rounded bg-slate-800 text-slate-300">SHAP</span>
         </button>
 
         <button
           onClick={() => setActiveTab('ESG')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'ESG'
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/30'
+              ? 'bg-emerald-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -240,7 +240,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           onClick={() => setActiveTab('CTMC')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'CTMC'
-              ? 'bg-amber-600 text-white shadow-md shadow-amber-900/30'
+              ? 'bg-amber-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -253,26 +253,26 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           onClick={() => setActiveTab('BLE_TOKEN')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'BLE_TOKEN'
-              ? 'bg-cyan-600 text-white shadow-md shadow-cyan-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
-          <Bluetooth className="w-3.5 h-3.5 text-cyan-400" />
+          <Bluetooth className="w-3.5 h-3.5 text-sky-400" />
           <span>5. Offline Mesh Token</span>
-          <span className="text-[10px] px-1 rounded bg-cyan-950 text-cyan-300">PWA Zero-Cell</span>
+          <span className="text-[10px] px-1 rounded bg-slate-800 text-slate-300">PWA Zero-Cell</span>
         </button>
 
         <button
           onClick={() => setActiveTab('SHADOW')}
           className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
             activeTab === 'SHADOW'
-              ? 'bg-violet-600 text-white shadow-md shadow-violet-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
-          <Clock className="w-3.5 h-3.5 text-violet-400" />
+          <Clock className="w-3.5 h-3.5 text-slate-300" />
           <span>6. Shadow Possession</span>
-          <span className="text-[10px] px-1 rounded bg-violet-950 text-violet-300">0 Delay</span>
+          <span className="text-[10px] px-1 rounded bg-slate-800 text-slate-300">0 Delay</span>
         </button>
       </div>
 
@@ -313,28 +313,28 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
             {/* Card 2: Counterfactual XAI */}
             <div
               onClick={() => setActiveTab('XAI')}
-              className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/60 transition shadow-xl cursor-pointer flex flex-col justify-between"
+              className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/60 transition shadow-xl cursor-pointer flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-950/80 border border-indigo-800 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
                     <Sparkles className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-900/40 text-indigo-300 border border-indigo-700/40">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-blue-300 border border-slate-700">
                     FEATURE 02
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-indigo-300 transition">
+                <h3 className="text-base font-bold text-white group-hover:text-blue-300 transition">
                   Counterfactual XAI Controller Interface
                 </h3>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                   Overcomes controller hesitancy with transparent <strong>SHAP waterfall attributions</strong> (+38% Risk, +22% OHE) and counterfactual "what-if" deferral impact cards.
                 </p>
-                <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-indigo-300">
+                <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300">
                   Confidence: 94.6% | 3 Express Regs Predicted
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-indigo-400 font-semibold">
+              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-blue-400 font-semibold">
                 <span>Inspect SHAP & Deferral Cascade</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </div>
@@ -403,28 +403,28 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
             {/* Card 5: Offline BLE Mesh Token */}
             <div
               onClick={() => setActiveTab('BLE_TOKEN')}
-              className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 transition shadow-xl cursor-pointer flex flex-col justify-between"
+              className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/60 transition shadow-xl cursor-pointer flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-sky-400 group-hover:scale-110 transition">
                     <Bluetooth className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-900/40 text-cyan-300 border border-cyan-700/40">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
                     FEATURE 05
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition">
+                <h3 className="text-base font-bold text-white group-hover:text-sky-300 transition">
                   Offline-First Edge-Mesh Digital Token
                 </h3>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                   Resolves zero-cellular connectivity in deep cuttings. Gang supervisors sign off track fitness via local cryptographic keys relayed through BLE peer-to-peer mesh.
                 </p>
-                <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-cyan-300">
+                <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300">
                   Zero Manual Telephonic Block Clear Delay
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-cyan-400 font-semibold">
+              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-blue-400 font-semibold">
                 <span>Simulate BLE PWA Mesh Sign-off</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </div>
@@ -433,28 +433,28 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
             {/* Card 6: Shadow Possession Opportunism */}
             <div
               onClick={() => setActiveTab('SHADOW')}
-              className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-violet-500/60 transition shadow-xl cursor-pointer flex flex-col justify-between"
+              className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-blue-500/60 transition shadow-xl cursor-pointer flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-violet-950/80 border border-violet-800 flex items-center justify-center text-violet-400 group-hover:scale-110 transition">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 group-hover:scale-110 transition">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-violet-900/40 text-violet-300 border border-violet-700/40">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
                     FEATURE 06
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-white group-hover:text-violet-300 transition">
+                <h3 className="text-base font-bold text-white group-hover:text-slate-200 transition">
                   Predictive Shadow Possession Opportunism
                 </h3>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                   Detects natural passenger lulls, mandatory train regulations, and terminal turnaround margins, executing maintenance with <strong>zero incremental delay</strong>.
                 </p>
-                <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-violet-300">
+                <div className="mt-4 p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-300">
                   Identified 2 Zero-Cost Corridor Windows
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-violet-400 font-semibold">
+              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-blue-400 font-semibold">
                 <span>Review Active Shadow Slots</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </div>
@@ -534,7 +534,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
 
                 <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
                   <span className="text-[11px] font-semibold text-slate-400 uppercase">Single Section Run</span>
-                  <div className="text-2xl sm:text-3xl font-mono font-bold text-purple-400 mt-1">
+                  <div className="text-2xl sm:text-3xl font-mono font-bold text-sky-400 mt-1">
                     {slwResult.t_run_mins}m
                   </div>
                   <span className="text-[11px] text-slate-500">68 km @ 75 km/h Avg</span>
@@ -587,8 +587,8 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                               {tr.direction} LINE
                             </span>
                           </td>
-                          <td className="p-3 text-cyan-300">{tr.departure_time}</td>
-                          <td className="p-3 text-purple-300">{tr.arrival_time}</td>
+                          <td className="p-3 text-sky-300">{tr.departure_time}</td>
+                          <td className="p-3 text-blue-300">{tr.arrival_time}</td>
                           <td className="p-3 text-amber-300">{tr.loop_holding_station}</td>
                           <td className="p-3 text-emerald-400 flex items-center gap-1.5">
                             <CheckCircle2 className="w-3.5 h-3.5" />
@@ -611,11 +611,11 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
               <div>
-                <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider">
                   Feature 02 Controller Dashboard
                 </span>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-indigo-400" />
+                  <Sparkles className="w-5 h-5 text-blue-400" />
                   <span>Explainable AI (XAI) Controller Decision Cards (SHAP & Counterfactuals)</span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
@@ -632,7 +632,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                     setXaiParams((prev) => ({ ...prev, defer_hour: h }));
                     fetchXAIExplanation({ ...xaiParams, defer_hour: h }).then(setXaiResult);
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-indigo-300 cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-blue-300 cursor-pointer"
                 >
                   <option value={14}>14:00 (Peak Freight)</option>
                   <option value={15}>15:00 (Shatabdi Rush)</option>
@@ -646,10 +646,10 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-indigo-400" />
+                    <BarChart3 className="w-4 h-4 text-blue-400" />
                     <span>SHAP Waterfall Feature Attribution (Recommended Window: {xaiResult.window})</span>
                   </h3>
-                  <div className="px-3 py-1 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800 text-xs font-mono font-bold">
+                  <div className="px-3 py-1 rounded-full bg-blue-950/60 text-blue-300 border border-blue-800/60 text-xs font-mono font-bold">
                     Net Controller Confidence: {xaiResult.controller_confidence_index}%
                   </div>
                 </div>
@@ -992,11 +992,11 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
               <div>
-                <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider">
                   Feature 05 PWA Mobile Sign-off
                 </span>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Bluetooth className="w-5 h-5 text-cyan-400" />
+                  <Bluetooth className="w-5 h-5 text-sky-400" />
                   <span>Offline-First Edge-Mesh Digital Token System (PWI / SI Mobile Sign-off)</span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
@@ -1007,7 +1007,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
               <button
                 onClick={runTokenGeneration}
                 disabled={isTokenGenerating}
-                className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-2 transition cursor-pointer shadow-sm"
               >
                 <Key className="w-3.5 h-3.5" />
                 <span>Mint New Verification Token</span>
@@ -1018,10 +1018,10 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
             {tokenResult && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {/* Cryptographic Token Details */}
-                <div className="p-5 rounded-xl bg-slate-950 border border-cyan-800/60 space-y-4">
+                <div className="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
-                      <Key className="w-4 h-4 text-cyan-400" />
+                    <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                      <Key className="w-4 h-4 text-blue-400" />
                       <span>Cryptographic Clearance Certificate</span>
                     </span>
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
@@ -1029,7 +1029,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                     </span>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-slate-900 font-mono text-sm sm:text-base text-cyan-300 border border-slate-800 flex items-center justify-between">
+                  <div className="p-3 rounded-lg bg-slate-900 font-mono text-sm sm:text-base text-blue-300 border border-slate-800 flex items-center justify-between">
                     <span>{tokenResult.token}</span>
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   </div>
@@ -1049,7 +1049,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                     </div>
                     <div className="p-2 rounded bg-slate-900 border border-slate-800">
                       <span className="text-slate-500 block text-[10px]">Track Fitness:</span>
-                      <strong className="text-cyan-300">{tokenResult.track_fitness_status}</strong>
+                      <strong className="text-emerald-400">{tokenResult.track_fitness_status}</strong>
                     </div>
                   </div>
 
@@ -1062,7 +1062,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                 <div className="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <WifiOff className="w-4 h-4 text-cyan-400" />
+                      <WifiOff className="w-4 h-4 text-slate-400" />
                       <span>BLE Mesh Peer-to-Peer Relay Trajectory</span>
                     </span>
                     <span className="text-xs font-mono text-slate-400">Zero-4G Cellular</span>
@@ -1071,7 +1071,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                   <div className="space-y-3">
                     {tokenResult.mesh_hops.map((h, idx) => (
                       <div key={idx} className="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
-                        <div className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300 flex items-center justify-center font-mono font-bold text-[10px]">
+                        <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 text-blue-300 flex items-center justify-center font-mono font-bold text-[10px]">
                           {h.hop}
                         </div>
                         <div className="flex-1">
@@ -1080,7 +1080,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                             RSSI: {h.ble_rssi_dbm} dBm • Status: {h.status}
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-cyan-300 font-mono">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300 font-mono">
                           HOP {h.hop}
                         </span>
                       </div>
@@ -1099,11 +1099,11 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
           <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
               <div>
-                <span className="text-xs font-mono font-bold text-violet-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider">
                   Feature 06 Timetable Mining
                 </span>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-violet-400" />
+                  <Clock className="w-5 h-5 text-blue-400" />
                   <span>Predictive Shadow Possession Opportunism</span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
@@ -1114,7 +1114,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
               <button
                 onClick={loadShadowOpportunities}
                 disabled={isShadowLoading}
-                className="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold flex items-center gap-2 transition cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-2 transition cursor-pointer shadow-sm"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isShadowLoading ? 'animate-spin' : ''}`} />
                 <span>Re-Scan Timetable Shadows</span>
@@ -1123,9 +1123,9 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {shadowOpportunities.map((s, idx) => (
-                <div key={idx} className="p-5 rounded-2xl bg-slate-950 border border-violet-900/50 space-y-3">
+                <div key={idx} className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-violet-900/40 text-violet-300 border border-violet-700/50">
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-blue-300 border border-slate-700">
                       {s.shadow_id}
                     </span>
                     <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 font-mono">
@@ -1137,7 +1137,7 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                   <div>
                     <h3 className="text-sm font-bold text-white">{s.parent_event}</h3>
                     <div className="text-xs text-slate-400 mt-1">
-                      Section: <strong className="text-slate-200">{s.section}</strong> • Window: <strong className="text-cyan-300">{s.window}</strong>
+                      Section: <strong className="text-slate-200">{s.section}</strong> • Window: <strong className="text-sky-300">{s.window}</strong>
                     </div>
                   </div>
 
@@ -1147,17 +1147,17 @@ export default function AdvancedCapabilitiesModule({ onNavigate }) {
                     </span>
                     {s.feasible_tasks.map((task, tIdx) => (
                       <div key={tIdx} className="text-xs text-slate-300 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
                         <span>{task}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="text-violet-300 font-semibold">{s.efficiency_gain}</span>
+                    <span className="text-slate-300 font-semibold">{s.efficiency_gain}</span>
                     <button
                       onClick={() => onNavigate('planner')}
-                      className="px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-bold cursor-pointer transition text-[11px]"
+                      className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold cursor-pointer transition text-[11px] shadow-sm"
                     >
                       Sanction Shadow Slot
                     </button>

@@ -71,10 +71,10 @@ export default function PipelineArchitectureModule({ onNavigate }) {
             </button>
             <button
               onClick={() => onNavigate('planner')}
-              className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center gap-2 transition cursor-pointer shadow-md"
+              className="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold flex items-center gap-2 transition cursor-pointer shadow-sm border border-blue-600/50"
             >
               <Cpu className="w-4 h-4" />
-              <span>Launch AI Optimizer</span>
+              <span>Launch Optimizer</span>
             </button>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
                       Stage {stg.stageNumber}
                     </span>
                     {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+                      <span className="w-2 h-2 rounded-full bg-blue-400" />
                     )}
                   </div>
                   <div className="text-xs font-bold line-clamp-2 leading-snug">
@@ -214,8 +214,8 @@ export default function PipelineArchitectureModule({ onNavigate }) {
 
             {/* Technical Highlights / Engineering Guardrails */}
             <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-2">
-              <h4 className="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+              <h4 className="text-xs font-bold text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
                 Key Algorithmic Rules & Technical Guardrails
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
@@ -224,7 +224,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
                     key={idx}
                     className="text-xs text-slate-300 p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex items-start gap-2"
                   >
-                    <span className="text-purple-400 font-bold">•</span>
+                    <span className="text-blue-400 font-bold">•</span>
                     <span>{hl}</span>
                   </div>
                 ))}
@@ -282,13 +282,13 @@ export default function PipelineArchitectureModule({ onNavigate }) {
               </div>
 
               {/* Horizon 2: Weekly Tactical */}
-              <div className="p-5 rounded-2xl bg-slate-950 border border-purple-900/40 shadow-lg shadow-purple-950/20 space-y-4 flex flex-col justify-between">
+              <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 shadow-md space-y-4 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
+                    <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
                       7-Day Rolling
                     </span>
-                    <span className="text-[10px] text-purple-400">Divisional Level</span>
+                    <span className="text-[10px] text-blue-400">Divisional Level</span>
                   </div>
                   <h3 className="text-base font-bold text-white">Weekly Tactical</h3>
                   <p className="text-xs text-slate-400 mt-1">
@@ -302,14 +302,14 @@ export default function PipelineArchitectureModule({ onNavigate }) {
                     </div>
                     <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
                       <span className="text-slate-400 block font-semibold">Output / Artifact:</span>
-                      <span className="text-purple-300 font-mono font-medium">Finalized divisional weekly block schedule (Circular).</span>
+                      <span className="text-blue-300 font-mono font-medium">Finalized divisional weekly block schedule (Circular).</span>
                     </div>
                   </div>
                 </div>
 
                 <button
                   onClick={() => onNavigate('gantt')}
-                  className="w-full py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800 text-xs font-bold text-purple-200 border border-purple-700/50 transition cursor-pointer"
+                  className="w-full py-2 rounded-xl bg-blue-900/40 hover:bg-blue-800/60 text-xs font-bold text-blue-200 border border-blue-700/50 transition cursor-pointer"
                 >
                   View Weekly Schedule
                 </button>
@@ -384,7 +384,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
 
                 <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-cyan-200 border border-slate-800 overflow-x-auto space-y-2">
                   <div>H(gmt) = ( gmt / η )^β</div>
-                  <div className="text-purple-300">
+                  <div className="text-sky-300">
                     TQI(t) = TQI₀ · exp( κ · (GMT_daily · t) / (1 + ω · σ_weather) )
                   </div>
                 </div>
@@ -394,7 +394,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
                     <strong className="text-cyan-300">H(gmt):</strong> Cumulative Weibull hazard over Gross Million Tonnes (GMT). Shape factor β = 2.4, Scale η = 500 GMT.
                   </div>
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <strong className="text-purple-300">TQI(t):</strong> Instantaneous Track Quality Index standard deviation (alignment, twist, longitudinal level).
+                    <strong className="text-sky-300">TQI(t):</strong> Instantaneous Track Quality Index standard deviation (alignment, twist, longitudinal level).
                   </div>
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
                     <strong className="text-amber-300">σ_weather:</strong> Ambient rail temperature excess over neutral continuous welded rail (CWR) buckling limits.
@@ -405,30 +405,30 @@ export default function PipelineArchitectureModule({ onNavigate }) {
               {/* 1B: Composite Priority Index (CPI) Formulation */}
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-purple-300 uppercase tracking-wider font-mono">
+                  <span className="text-xs font-bold text-blue-300 uppercase tracking-wider font-mono">
                     B. Composite Priority Index (CPI) Formulation
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
                     Simplex: Σ w_m = 1, w_m &gt; 0
                   </span>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-purple-200 border border-slate-800 overflow-x-auto">
+                <div className="p-3 rounded-lg bg-slate-900 font-mono text-xs sm:text-sm text-blue-200 border border-slate-800 overflow-x-auto">
                   CPI_i = w₁ · S_i + w₂ · [ 1 - exp( -Δt_i^overdue / τ ) ] + w₃ · C_i^asset + w₄ · ( GMT_i / max_GMT )
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1 text-xs">
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <strong className="text-purple-300 block">w₁ = 0.35 (Severity S_i):</strong> Raw defect score ∈ [0, 1] (USFD flaw size, point throw resistance).
+                    <strong className="text-blue-300 block">w₁ = 0.35 (Severity S_i):</strong> Raw defect score ∈ [0, 1] (USFD flaw size, point throw resistance).
                   </div>
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <strong className="text-purple-300 block">w₂ = 0.25 (Overdue Δt):</strong> Exponential saturation with decay constant τ = 7.0 days past safety deadline.
+                    <strong className="text-blue-300 block">w₂ = 0.25 (Overdue Δt):</strong> Exponential saturation with decay constant τ = 7.0 days past safety deadline.
                   </div>
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <strong className="text-purple-300 block">w₃ = 0.25 (Criticality C_i):</strong> Crossovers = 1.0, Mainline = 0.8, Yard loops = 0.3.
+                    <strong className="text-blue-300 block">w₃ = 0.25 (Criticality C_i):</strong> Crossovers = 1.0, Mainline = 0.8, Yard loops = 0.3.
                   </div>
                   <div className="p-2.5 rounded bg-slate-900 border border-slate-800">
-                    <strong className="text-purple-300 block">w₄ = 0.15 (GMT Ratio):</strong> Normalized cumulative tonnage exposure ratio (GMT / max_GMT).
+                    <strong className="text-blue-300 block">w₄ = 0.15 (GMT Ratio):</strong> Normalized cumulative tonnage exposure ratio (GMT / max_GMT).
                   </div>
                 </div>
               </div>
@@ -466,7 +466,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
                     <strong className="text-red-400">λ₃ · Delay:</strong> Minimizes weighted train regulation (V_r = 10 for Rajdhani, 5 Express).
                   </div>
                   <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300">
-                    <strong className="text-purple-400">λ₄ · Possession:</strong> Minimizes physical track block footprint across corridor segments.
+                    <strong className="text-sky-400">λ₄ · Possession:</strong> Minimizes physical track block footprint across corridor segments.
                   </div>
                 </div>
               </div>
@@ -546,7 +546,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
             </div>
 
             {/* Section 3: Value-Adds Banner */}
-            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div>
                 <strong className="text-white block font-bold text-sm">
                   Cutting-Edge Value-Add Capabilities Integrated
@@ -557,7 +557,7 @@ export default function PipelineArchitectureModule({ onNavigate }) {
               </div>
               <button
                 onClick={() => onNavigate('advanced')}
-                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer transition shrink-0"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold cursor-pointer transition shrink-0 shadow-sm border border-blue-500/30"
               >
                 Open Capabilities Hub
               </button>

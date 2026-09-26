@@ -513,7 +513,7 @@ export const STAGES_PIPELINE_DATA = [
     title: "Stage 3: AI Risk Scoring & Criticality Prioritization",
     tagline: "Composite Priority Index (CPI) & Hard Safety Rules",
     icon: "BarChart3",
-    color: "purple",
+    color: "blue",
     status: "Calculated • 7 Requisitions Ranked",
     description: "Scores every defect using multi-factor regression: CPI = w1*S_defect + w2*D_overdue + w3*C_asset + w4*T_traffic. Emergency safety flaws bypass normal batch queues.",
     inputs: [

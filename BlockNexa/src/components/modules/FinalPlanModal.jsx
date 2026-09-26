@@ -104,7 +104,7 @@ export default function FinalPlanModal({ isOpen, onClose, currentUser }) {
             </div>
             <div>
               <span className="text-slate-500 block text-[10px] uppercase font-bold">SANCTIONED WINDOW</span>
-              <span className="font-bold text-purple-900">10:45 to 13:45 IST (3h 00m)</span>
+              <span className="font-bold text-blue-900">10:45 to 13:45 IST (3h 00m)</span>
             </div>
             <div>
               <span className="text-slate-500 block text-[10px] uppercase font-bold">CAUTION ORDER</span>
@@ -141,7 +141,7 @@ export default function FinalPlanModal({ isOpen, onClose, currentUser }) {
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] text-slate-800">
               <span><strong>COA Timetable Path Reservation:</strong> #COA/RES/DN-MAIN/1045-1345</span>
-              <span className="text-purple-700 font-bold">STATUS: LOCKED IN LIVE TIMETABLE</span>
+              <span className="text-blue-700 font-bold">STATUS: LOCKED IN LIVE TIMETABLE</span>
             </div>
           </div>
 

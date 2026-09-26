@@ -99,7 +99,7 @@ export default function RailwayMapModule({ onNavigate }) {
             <button
               onClick={() => setActiveLayer('CLUSTERS')}
               className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
-                activeLayer === 'CLUSTERS' ? 'bg-purple-600 text-white' : 'text-slate-400 hover:text-white'
+                activeLayer === 'CLUSTERS' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
               }`}
             >
               Spatial Clusters
@@ -145,8 +145,8 @@ export default function RailwayMapModule({ onNavigate }) {
             <span className="flex items-center gap-1.5 text-cyan-400">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" /> Up Main
             </span>
-            <span className="flex items-center gap-1.5 text-purple-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-purple-500" /> 3rd Corridor
+            <span className="flex items-center gap-1.5 text-amber-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> 3rd Corridor
             </span>
             <span className="flex items-center gap-1.5 text-emerald-400">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Loop Line
@@ -199,7 +199,7 @@ export default function RailwayMapModule({ onNavigate }) {
                 {(activeLayer === 'ALL' || activeLayer === 'CLUSTERS' || activeLayer === 'TRACK') && (
                   <div
                     onClick={() => setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[0])}
-                    className="absolute -top-3.5 h-10 rounded-lg bg-purple-600/30 border-2 border-purple-400 hover:bg-purple-600/50 transition cursor-pointer shadow-lg flex items-center justify-center px-2 text-[10px] font-bold text-white"
+                    className="absolute -top-3.5 h-10 rounded-lg bg-blue-600/30 border-2 border-blue-400 hover:bg-blue-600/50 transition cursor-pointer shadow-md flex items-center justify-center px-2 text-[10px] font-bold text-white"
                     style={{
                       left: `${kmToPercent(284.2)}%`,
                       width: `${Math.max(4, kmToPercent(286.0) - kmToPercent(284.2) + 6)}%`,
@@ -264,13 +264,13 @@ export default function RailwayMapModule({ onNavigate }) {
 
             {/* Track 3: 3rd Corridor Line */}
             <div className="relative flex items-center">
-              <div className="w-24 shrink-0 text-right pr-4 text-xs font-mono font-bold text-purple-400">
+              <div className="w-24 shrink-0 text-right pr-4 text-xs font-mono font-bold text-amber-400">
                 3RD CORR
               </div>
-              <div className="relative-1 flex-1 h-2.5 bg-purple-950/80 border-y border-purple-600/60 rounded">
+              <div className="relative-1 flex-1 h-2.5 bg-amber-950/60 border-y border-amber-600/60 rounded">
                 {/* Available between Jalgaon and Bhusawal (Km 395 to 444) */}
                 <div
-                  className="absolute inset-y-0 bg-purple-600/30 rounded"
+                  className="absolute inset-y-0 bg-amber-600/30 rounded"
                   style={{ left: `${kmToPercent(395)}%`, right: `${100 - kmToPercent(444)}%` }}
                 />
                 {/* Axle counter anomaly at Km 398 */}
@@ -378,12 +378,12 @@ export default function RailwayMapModule({ onNavigate }) {
         <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 shadow-lg space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Layers className="w-5 h-5 text-purple-400" />
+              <Layers className="w-5 h-5 text-blue-400" />
               <h3 className="text-base font-bold text-white">
                 Spatial Maintenance Clusters
               </h3>
             </div>
-            <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
+            <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
               3 Clusters Mapped
             </span>
           </div>
@@ -401,12 +401,12 @@ export default function RailwayMapModule({ onNavigate }) {
                   onClick={() => setSelectedCluster(cluster)}
                   className={`p-4 rounded-xl border transition cursor-pointer ${
                     isSelected
-                      ? 'bg-purple-950/30 border-purple-500 shadow-md'
+                      ? 'bg-blue-950/30 border-blue-500 shadow-sm'
                       : 'bg-slate-950 border-slate-800 hover:border-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono font-bold text-purple-300">
+                    <span className="text-xs font-mono font-bold text-blue-300">
                       {cluster.clusterId} • {cluster.lineCode}
                     </span>
                     <span

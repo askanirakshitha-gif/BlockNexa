@@ -135,12 +135,12 @@ export default function AIPlannerModule({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-700/50">
+            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-700/50">
               Module 03 • CORE ENGINE
             </span>
             <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
               <span>AI Block Optimizer & Bundling Engine</span>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40">
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
                 MILP / CP-SAT Solver
               </span>
             </h1>
@@ -155,7 +155,7 @@ export default function AIPlannerModule({
           <button
             onClick={handleRunOptimizer}
             disabled={isSolving}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-xl shadow-purple-900/40 border border-purple-400/40 transition disabled:opacity-75 cursor-pointer"
+            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm transition disabled:opacity-75 cursor-pointer"
           >
             {isSolving ? (
               <>
@@ -164,7 +164,7 @@ export default function AIPlannerModule({
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-yellow-300" />
+                <Sparkles className="w-4 h-4 text-amber-300" />
                 <span>{isOptimized ? 'Re-Run MILP Optimizer' : 'Solve Multi-Objective Block Plan'}</span>
               </>
             )}
@@ -178,7 +178,7 @@ export default function AIPlannerModule({
           onClick={() => setActiveSubTab('SOLVER')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
             activeSubTab === 'SOLVER'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -189,7 +189,7 @@ export default function AIPlannerModule({
           onClick={() => setActiveSubTab('COMPATIBILITY')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
             activeSubTab === 'COMPATIBILITY'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -200,7 +200,7 @@ export default function AIPlannerModule({
           onClick={() => setActiveSubTab('RESOURCES')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
             activeSubTab === 'RESOURCES'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -211,7 +211,7 @@ export default function AIPlannerModule({
           onClick={() => setActiveSubTab('SCENARIOS')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
             activeSubTab === 'SCENARIOS'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -222,7 +222,7 @@ export default function AIPlannerModule({
           onClick={() => setActiveSubTab('ML_MODELS')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
             activeSubTab === 'ML_MODELS'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-900/30'
+              ? 'bg-blue-600 text-white shadow-sm'
               : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -236,25 +236,25 @@ export default function AIPlannerModule({
 
       {/* Solver In-Progress Animation Banner */}
       {isSolving && (
-        <div className="bg-purple-950/40 rounded-2xl border border-purple-500/60 p-5 shadow-2xl animate-pulse">
+        <div className="bg-slate-900 rounded-2xl border border-blue-500/60 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-purple-300 flex items-center gap-2">
-              <Cpu className="w-4 h-4 animate-spin" />
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-300 flex items-center gap-2">
+              <Cpu className="w-4 h-4 animate-spin text-blue-400" />
               <span>Multi-Objective MILP / CP-SAT Solver Executing</span>
             </span>
-            <span className="text-xs font-mono font-bold text-purple-200">
+            <span className="text-xs font-mono font-bold text-slate-200">
               Stage {solverStage + 1} of {solverSteps.length}
             </span>
           </div>
 
-          <div className="w-full bg-slate-900 rounded-full h-2 mb-3 overflow-hidden">
+          <div className="w-full bg-slate-950 rounded-full h-2 mb-3 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-purple-500 to-blue-400 rounded-full transition-all duration-300"
+              className="h-full bg-blue-500 rounded-full transition-all duration-300"
               style={{ width: `${((solverStage + 1) / solverSteps.length) * 100}%` }}
             />
           </div>
 
-          <p className="text-xs sm:text-sm font-mono text-purple-200">
+          <p className="text-xs sm:text-sm font-mono text-slate-300">
             &gt; {solverSteps[solverStage]}
           </p>
         </div>
@@ -361,18 +361,18 @@ export default function AIPlannerModule({
                 <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                   4. Corridor Capacity
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800 font-mono font-bold">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-blue-300 border border-slate-700 font-mono font-bold">
                   Quad Track
                 </span>
               </div>
               <div className="space-y-2 text-xs">
                 <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800/80">
                   <span className="text-slate-400">Down Main Line</span>
-                  <span className="font-mono text-purple-300 font-bold">Window 10:45-13:45</span>
+                  <span className="font-mono text-blue-300 font-bold">Window 10:45-13:45</span>
                 </div>
                 <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800/80">
                   <span className="text-slate-400">Up Main Line</span>
-                  <span className="font-mono text-cyan-300 font-bold">Window 14:15-16:00</span>
+                  <span className="font-mono text-sky-300 font-bold">Window 14:15-16:00</span>
                 </div>
                 <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800/80">
                   <span className="text-slate-400">Bi-Dir Loop 3 (CSN)</span>
@@ -392,7 +392,7 @@ export default function AIPlannerModule({
             <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 shadow-lg space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-purple-400" />
+                  <BarChart3 className="w-5 h-5 text-blue-400" />
                   <h3 className="text-base font-bold text-white">
                     MILP Objective Function Weights
                   </h3>
@@ -402,7 +402,7 @@ export default function AIPlannerModule({
                 </span>
               </div>
 
-              <div className="p-3 rounded-lg bg-slate-950 font-mono text-[11px] sm:text-xs text-purple-200 border border-slate-800 overflow-x-auto">
+              <div className="p-3 rounded-lg bg-slate-950 font-mono text-[11px] sm:text-xs text-slate-300 border border-slate-800 overflow-x-auto">
                 max Z = λ₁ ∑_(i,t) [ P_i · u_i,t ] + λ₂ ∑_(i&lt;j) [ C_i,j · b_i,j ] - λ₃ ∑_r [ V_r · δ_r ] - λ₄ ∑_(k,t) [ y_k,t ]
               </div>
 
@@ -411,7 +411,7 @@ export default function AIPlannerModule({
                 <div>
                   <div className="flex justify-between text-xs mb-1">
                     <span className="text-slate-300 font-medium">Risk Reduction Weight (λ₁ · ∑ P_i · u_i,t)</span>
-                    <span className="text-purple-400 font-mono font-bold">{weights.severity}%</span>
+                    <span className="text-blue-400 font-mono font-bold">{weights.severity}%</span>
                   </div>
                   <input
                     type="range"
@@ -419,7 +419,7 @@ export default function AIPlannerModule({
                     max="60"
                     value={weights.severity}
                     onChange={(e) => setWeights({ ...weights, severity: Number(e.target.value) })}
-                    className="w-full accent-purple-500 cursor-pointer"
+                    className="w-full accent-blue-600 cursor-pointer"
                   />
                 </div>
 
@@ -474,7 +474,7 @@ export default function AIPlannerModule({
             <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 shadow-lg space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-purple-400" />
+                  <Layers className="w-5 h-5 text-blue-400" />
                   <h3 className="text-base font-bold text-white">
                     Multi-Department Joint Bundling Result
                   </h3>
@@ -488,9 +488,9 @@ export default function AIPlannerModule({
                 Detects adjacent spatial maintenance demands and synchronizes them into a single track possession within a 12 km isolation block.
               </p>
 
-              <div className="p-4 rounded-xl bg-purple-950/20 border border-purple-800/50 space-y-3">
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-purple-300 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-blue-300 uppercase tracking-wider">
                     Bundled Joint Block #JB-01
                   </span>
                   <span className="text-xs font-mono font-bold text-emerald-400">
@@ -571,7 +571,7 @@ export default function AIPlannerModule({
 
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <div className="text-xs text-slate-400">Delay Averted</div>
-                <div className="text-xl font-mono font-extrabold text-purple-400">
+                <div className="text-xl font-mono font-extrabold text-sky-400">
                   {AI_OPTIMIZED_PLAN_RESULT.totalPunctualityLossAverted}
                 </div>
                 <div className="text-[10px] text-slate-500">-78.4% Passenger delay</div>
@@ -607,14 +607,14 @@ export default function AIPlannerModule({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-800">
+                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-blue-300 border border-slate-700">
                         {win.id}
                       </span>
                       <span className="text-sm font-bold text-white">{win.title}</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs font-mono">
                       <span className="text-slate-400">Window:</span>
-                      <span className="text-yellow-400 font-bold bg-yellow-950/40 px-2 py-0.5 rounded border border-yellow-800/40">
+                      <span className="text-amber-400 font-bold bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
                         {win.scheduledStart} — {win.scheduledEnd} ({win.duration})
                       </span>
                     </div>
@@ -630,7 +630,7 @@ export default function AIPlannerModule({
                     </div>
                     {win.trainRegulationPlan.map((reg, idx) => (
                       <div key={idx} className="flex items-start gap-1.5 text-slate-300 text-[11px]">
-                        <span className="text-purple-400">•</span>
+                        <span className="text-blue-400">•</span>
                         <span>{reg}</span>
                       </div>
                     ))}
@@ -821,13 +821,13 @@ export default function AIPlannerModule({
                     onClick={() => setSelectedScenario(opt.id)}
                     className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between ${
                       isSelected
-                        ? 'bg-purple-950/30 border-purple-500 shadow-xl shadow-purple-950/30'
+                        ? 'bg-slate-800/80 border-blue-500 shadow-sm'
                         : 'bg-slate-950 border-slate-800 hover:border-slate-700'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-purple-300 border border-slate-800">
+                        <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-blue-300 border border-slate-800">
                           {opt.id}
                         </span>
                         {opt.isRecommended && (
@@ -843,7 +843,7 @@ export default function AIPlannerModule({
                       <div className="my-4 space-y-2 text-xs">
                         <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
                           <span className="text-slate-400">Duration:</span>
-                          <span className="font-mono font-bold text-yellow-300">{opt.duration}</span>
+                          <span className="font-mono font-bold text-amber-300">{opt.duration}</span>
                         </div>
                         <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
                           <span className="text-slate-400">Track Output Cleared:</span>
@@ -851,7 +851,7 @@ export default function AIPlannerModule({
                         </div>
                         <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
                           <span className="text-slate-400">Passenger Delay:</span>
-                          <span className="font-mono font-bold text-purple-300">+{opt.passengerDelayTotalMins} Mins</span>
+                          <span className="font-mono font-bold text-sky-300">+{opt.passengerDelayTotalMins} Mins</span>
                         </div>
                         <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
                           <span className="text-slate-400">Risk Eliminated:</span>
@@ -872,7 +872,7 @@ export default function AIPlannerModule({
                       }}
                       className={`w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
                         isSelected
-                          ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg'
+                          ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-sm'
                           : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
                       }`}
                     >
@@ -891,18 +891,18 @@ export default function AIPlannerModule({
       {activeSubTab === 'ML_MODELS' && (
         <div className="space-y-6">
           {/* Provenance & Training Pipeline Banner */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-purple-950/80 via-slate-900 to-indigo-950/80 border border-purple-500/50 shadow-xl space-y-3">
+          <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-3">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               <div className="flex items-start sm:items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/40 shrink-0">
-                  <Bot className="w-5 h-5 text-purple-400" />
+                <div className="p-2.5 rounded-xl bg-slate-800 text-blue-400 border border-slate-700 shrink-0">
+                  <Bot className="w-5 h-5 text-blue-400" />
                 </div>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-extrabold text-white tracking-wide">
                       Machine Learning Engine: Trained on Cloned Indian Railways Datasets
                     </span>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-400/40">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-blue-300 border border-slate-700">
                       scikit-learn
                     </span>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
@@ -911,7 +911,7 @@ export default function AIPlannerModule({
                   </div>
                   <p className="text-xs text-slate-300 mt-1">
                     Directly trained from cloned repository{' '}
-                    <code className="px-1.5 py-0.5 rounded bg-slate-950 text-purple-300 font-mono text-[11px] border border-slate-800">
+                    <code className="px-1.5 py-0.5 rounded bg-slate-950 text-blue-300 font-mono text-[11px] border border-slate-800">
                       {TRAINED_MODEL_METRICS.repositorySource}
                     </code>{' '}
                     and open-source telemetry{' '}
@@ -924,7 +924,7 @@ export default function AIPlannerModule({
 
               <div className="flex items-center gap-2 shrink-0">
                 <div className="text-right">
-                  <div className="text-xs font-mono font-extrabold text-purple-300">
+                  <div className="text-xs font-mono font-extrabold text-blue-300">
                     2 ML Models Operational
                   </div>
                   <div className="text-[10px] text-slate-400 font-mono">
@@ -954,14 +954,14 @@ export default function AIPlannerModule({
             <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 sm:p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30">
-                    <Target className="w-4 h-4 text-purple-400" />
+                  <div className="p-2 rounded-xl bg-slate-800 text-blue-400 border border-slate-700">
+                    <Target className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
                     <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
                       <span>Model 1: Maintenance Defect Risk Classifier</span>
                     </h3>
-                    <div className="text-[11px] text-purple-300 font-mono">
+                    <div className="text-[11px] text-blue-300 font-mono">
                       {TRAINED_MODEL_METRICS.models.maintenanceRiskClassifier.algorithm} (120 Trees, Balanced)
                     </div>
                   </div>
@@ -981,7 +981,7 @@ export default function AIPlannerModule({
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
                   <span className="text-slate-400 block text-[10px]">Precision</span>
-                  <span className="font-mono font-extrabold text-purple-300 text-sm">
+                  <span className="font-mono font-extrabold text-white text-sm">
                     {TRAINED_MODEL_METRICS.models.maintenanceRiskClassifier.metrics.precision}%
                   </span>
                 </div>
@@ -993,7 +993,7 @@ export default function AIPlannerModule({
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
                   <span className="text-slate-400 block text-[10px]">ROC-AUC</span>
-                  <span className="font-mono font-extrabold text-yellow-300 text-sm">
+                  <span className="font-mono font-extrabold text-amber-300 text-sm">
                     {TRAINED_MODEL_METRICS.models.maintenanceRiskClassifier.metrics.rocAuc}
                   </span>
                 </div>
@@ -1011,11 +1011,11 @@ export default function AIPlannerModule({
                       <div key={feature} className="space-y-0.5">
                         <div className="flex items-center justify-between text-[11px]">
                           <span className="font-mono text-slate-300">{feature}</span>
-                          <span className="font-mono text-purple-300">{(imp * 100).toFixed(1)}%</span>
+                          <span className="font-mono text-blue-300">{(imp * 100).toFixed(1)}%</span>
                         </div>
                         <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
                           <div
-                            className="h-full bg-purple-500 rounded-full"
+                            className="h-full bg-blue-500 rounded-full"
                             style={{ width: `${imp * 100 * 2.5}%` }}
                           />
                         </div>
@@ -1083,7 +1083,7 @@ export default function AIPlannerModule({
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
                   <span className="text-slate-400 block text-[10px]">R² Variance</span>
-                  <span className="font-mono font-extrabold text-cyan-400 text-sm">
+                  <span className="font-mono font-extrabold text-sky-400 text-sm">
                     {(TRAINED_MODEL_METRICS.models.trainDelayRegressor.metrics.r2Score * 100).toFixed(1)}%
                   </span>
                 </div>
@@ -1095,7 +1095,7 @@ export default function AIPlannerModule({
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
                   <span className="text-slate-400 block text-[10px]">RMSE</span>
-                  <span className="font-mono font-extrabold text-purple-300 text-sm">
+                  <span className="font-mono font-extrabold text-white text-sm">
                     {TRAINED_MODEL_METRICS.models.trainDelayRegressor.metrics.rmseMinutes} min
                   </span>
                 </div>
@@ -1113,11 +1113,11 @@ export default function AIPlannerModule({
                       <div key={feature} className="space-y-0.5">
                         <div className="flex items-center justify-between text-[11px]">
                           <span className="font-mono text-slate-300">{feature}</span>
-                          <span className="font-mono text-cyan-300">{(imp * 100).toFixed(1)}%</span>
+                          <span className="font-mono text-sky-300">{(imp * 100).toFixed(1)}%</span>
                         </div>
                         <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
                           <div
-                            className="h-full bg-cyan-500 rounded-full"
+                            className="h-full bg-sky-500 rounded-full"
                             style={{ width: `${imp * 100 * 3.5}%` }}
                           />
                         </div>
@@ -1147,7 +1147,7 @@ export default function AIPlannerModule({
                             scen.predictedDelay > 20
                               ? 'text-red-400'
                               : scen.predictedDelay > 8
-                              ? 'text-yellow-400'
+                              ? 'text-amber-400'
                               : 'text-emerald-400'
                           }`}
                         >
@@ -1162,11 +1162,11 @@ export default function AIPlannerModule({
           </div>
 
           {/* Live ML Interactive Testing Sandbox (Hits FastAPI /api/ml endpoints) */}
-          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-purple-500/40 shadow-xl space-y-4">
+          <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-purple-600/30 text-purple-300 border border-purple-500/40">
-                  <Cpu className="w-5 h-5 text-purple-400" />
+                <div className="p-2 rounded-xl bg-slate-800 text-blue-400 border border-slate-700">
+                  <Cpu className="w-5 h-5 text-blue-400" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -1187,10 +1187,10 @@ export default function AIPlannerModule({
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-white flex items-center gap-1.5">
-                    <Target className="w-4 h-4 text-purple-400" />
+                    <Target className="w-4 h-4 text-blue-400" />
                     <span>Test RandomForest Risk Classifier</span>
                   </span>
-                  <span className="text-[10px] font-mono text-purple-300">POST /api/ml/predict-risk</span>
+                  <span className="text-[10px] font-mono text-blue-300">POST /api/ml/predict-risk</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -1204,7 +1204,7 @@ export default function AIPlannerModule({
                       max="10"
                       value={liveDefectInput.severity}
                       onChange={(e) => setLiveDefectInput({ ...liveDefectInput, severity: Number(e.target.value) })}
-                      className="w-full accent-purple-500 cursor-pointer"
+                      className="w-full accent-blue-600 cursor-pointer"
                     />
                   </div>
                   <div>
@@ -1217,7 +1217,7 @@ export default function AIPlannerModule({
                       max="10"
                       value={liveDefectInput.safety_criticality}
                       onChange={(e) => setLiveDefectInput({ ...liveDefectInput, safety_criticality: Number(e.target.value) })}
-                      className="w-full accent-purple-500 cursor-pointer"
+                      className="w-full accent-blue-600 cursor-pointer"
                     />
                   </div>
                   <div>
@@ -1252,17 +1252,17 @@ export default function AIPlannerModule({
                 <button
                   onClick={handleRunLiveRisk}
                   disabled={isRiskPredicting}
-                  className="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+                  className="w-full py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                   <span>{isRiskPredicting ? 'Executing Python ML Inference...' : 'Run Live Backend Risk Prediction'}</span>
                 </button>
 
                 {liveRiskResult && (
-                  <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-500/50 space-y-1.5 animate-in fade-in">
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5 animate-in fade-in">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-300 font-semibold">Predicted Deferral Risk:</span>
-                      <span className="font-mono font-extrabold text-sm text-purple-200">
+                      <span className="font-mono font-extrabold text-sm text-blue-300">
                         {liveRiskResult.predicted_risk_percent}% ({liveRiskResult.priority_class})
                       </span>
                     </div>
@@ -1272,7 +1272,7 @@ export default function AIPlannerModule({
                         {liveRiskResult.is_emergency_bypass ? 'YES (Bypass Active)' : 'NO (Normal Queue)'}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-300 pt-1 border-t border-purple-800/60">
+                    <div className="text-[11px] text-slate-300 pt-1 border-t border-slate-800">
                       <strong>AI Action:</strong> {liveRiskResult.recommended_action}
                     </div>
                   </div>
@@ -1283,10 +1283,10 @@ export default function AIPlannerModule({
               <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-white flex items-center gap-1.5">
-                    <TrendingDown className="w-4 h-4 text-cyan-400" />
+                    <TrendingDown className="w-4 h-4 text-blue-400" />
                     <span>Test GradientBoosting Delay Regressor</span>
                   </span>
-                  <span className="text-[10px] font-mono text-cyan-300">POST /api/ml/predict-delay</span>
+                  <span className="text-[10px] font-mono text-blue-300">POST /api/ml/predict-delay</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -1301,7 +1301,7 @@ export default function AIPlannerModule({
                       step="0.5"
                       value={liveDelayInput.block_duration_hours}
                       onChange={(e) => setLiveDelayInput({ ...liveDelayInput, block_duration_hours: Number(e.target.value) })}
-                      className="w-full accent-cyan-500 cursor-pointer"
+                      className="w-full accent-blue-600 cursor-pointer"
                     />
                   </div>
                   <div>
@@ -1314,7 +1314,7 @@ export default function AIPlannerModule({
                       max="4"
                       value={liveDelayInput.activities_bundled}
                       onChange={(e) => setLiveDelayInput({ ...liveDelayInput, activities_bundled: Number(e.target.value) })}
-                      className="w-full accent-cyan-500 cursor-pointer"
+                      className="w-full accent-blue-600 cursor-pointer"
                     />
                   </div>
                   <div className="col-span-2 flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
@@ -1323,7 +1323,7 @@ export default function AIPlannerModule({
                       type="checkbox"
                       checked={liveDelayInput.has_loop_reroute}
                       onChange={(e) => setLiveDelayInput({ ...liveDelayInput, has_loop_reroute: e.target.checked })}
-                      className="w-4 h-4 accent-cyan-500 cursor-pointer rounded"
+                      className="w-4 h-4 accent-blue-600 cursor-pointer rounded"
                     />
                   </div>
                 </div>
@@ -1331,17 +1331,17 @@ export default function AIPlannerModule({
                 <button
                   onClick={handleRunLiveDelay}
                   disabled={isDelayPredicting}
-                  className="w-full py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+                  className="w-full py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm disabled:opacity-50"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                   <span>{isDelayPredicting ? 'Executing Python ML Inference...' : 'Run Live Backend Delay Prediction'}</span>
                 </button>
 
                 {liveDelayResult && (
-                  <div className="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/50 space-y-1.5 animate-in fade-in">
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5 animate-in fade-in">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-300 font-semibold">Predicted Train Delay:</span>
-                      <span className="font-mono font-extrabold text-sm text-cyan-300">
+                      <span className="font-mono font-extrabold text-sm text-blue-300">
                         {liveDelayResult.predicted_delay_minutes} minutes
                       </span>
                     </div>
@@ -1362,7 +1362,7 @@ export default function AIPlannerModule({
                 Re-train and evaluate both models anytime using the Python pipeline script:
               </p>
             </div>
-            <code className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-purple-300 font-mono text-xs">
+            <code className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-blue-300 font-mono text-xs">
               python scripts/train_model.py
             </code>
           </div>

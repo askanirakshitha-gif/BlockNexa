@@ -126,14 +126,14 @@ export default function AssetIntelligenceModule({ onNavigate }) {
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
             <span className="font-semibold uppercase tracking-wider">Signalling (SMMS)</span>
-            <Radio className="w-4 h-4 text-purple-400" />
+            <Radio className="w-4 h-4 text-emerald-400" />
           </div>
-          <div className="text-3xl font-extrabold font-mono text-purple-300">
+          <div className="text-3xl font-extrabold font-mono text-emerald-300">
             {ASSET_INTELLIGENCE_METRICS.signalHealthScore}%
           </div>
           <div className="w-full bg-slate-800 rounded-full h-1.5 mt-3 overflow-hidden">
             <div
-              className="bg-purple-500 h-full rounded-full"
+              className="bg-emerald-500 h-full rounded-full"
               style={{ width: `${ASSET_INTELLIGENCE_METRICS.signalHealthScore}%` }}
             />
           </div>

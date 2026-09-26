@@ -24,16 +24,16 @@ import {
 
 export const MODULES = [
   { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, badge: null },
-  { id: 'pipeline', label: 'Architecture', icon: GitBranch, badge: '7 Stages', badgeColor: 'bg-indigo-600 text-white' },
-  { id: 'map', label: '1. Railway Map', icon: MapPin, badge: 'GIS' },
-  { id: 'requests', label: '2. Maintenance Hub', icon: Wrench, badge: 'CPI' },
-  { id: 'planner', label: '3. AI Optimizer', icon: Cpu, badge: 'MILP', badgeColor: 'bg-purple-600 text-white animate-pulse' },
-  { id: 'gantt', label: '4. Master Schedule', icon: CalendarDays, badge: '3 Horizons' },
-  { id: 'safety', label: '5. Safety & Sanction', icon: ShieldCheck, badge: 'BDMS' },
-  { id: 'simulation', label: '6. Re-planner & Audit', icon: SlidersHorizontal, badge: 'Rolling' },
-  { id: 'advanced', label: '7. Advanced AI', icon: Sparkles, badge: '6 Value-Adds', badgeColor: 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-sm' },
-  { id: 'conflicts', label: 'Conflict Center', icon: AlertTriangle, badge: '3 Alerts', badgeColor: 'bg-red-500 text-white' },
-  { id: 'impact', label: 'Train Impact', icon: TrainTrack, badge: 'COA' },
+  { id: 'pipeline', label: 'Architecture', icon: GitBranch, badge: '7 Stages', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'map', label: '1. Railway Map', icon: MapPin, badge: 'GIS', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'requests', label: '2. Maintenance Hub', icon: Wrench, badge: 'CPI', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'planner', label: '3. AI Optimizer', icon: Cpu, badge: 'MILP', badgeColor: 'bg-blue-900/60 text-blue-200 border border-blue-700/60' },
+  { id: 'gantt', label: '4. Master Schedule', icon: CalendarDays, badge: '3 Horizons', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'safety', label: '5. Safety & Sanction', icon: ShieldCheck, badge: 'BDMS', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'simulation', label: '6. Re-planner & Audit', icon: SlidersHorizontal, badge: 'Rolling', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'advanced', label: '7. Advanced Capabilities', icon: Sparkles, badge: '6 Value-Adds', badgeColor: 'bg-blue-900/60 text-blue-200 border border-blue-700/60' },
+  { id: 'conflicts', label: 'Conflict Center', icon: AlertTriangle, badge: '3 Alerts', badgeColor: 'bg-red-950/80 text-red-300 border border-red-800/80' },
+  { id: 'impact', label: 'Train Impact', icon: TrainTrack, badge: 'COA', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
 ];
 
 export const WORKFLOW_STEPS = [
@@ -91,12 +91,12 @@ export default function Header({
               <span className="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
                 BlockNexa
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 border border-blue-700/50">
-                CRIS • AI v4.2
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-950 text-blue-200 border border-blue-800">
+                CRIS • Indian Railways
               </span>
-              <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-950/70 border border-emerald-800/60 px-2 py-0.5 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                Live Control Link Active
+              <span className="hidden md:inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Control Office Link Active
               </span>
             </div>
             <div className="text-xs text-slate-400 flex items-center gap-2">
@@ -110,32 +110,29 @@ export default function Header({
         {/* Live Feeds status & Clock */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Data Feed Indicators */}
-          <div className="hidden xl:flex items-center gap-2 text-[11px] bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+          <div className="hidden xl:flex items-center gap-2.5 text-[11px] bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
             <span className="text-slate-400 font-medium">Feeds:</span>
-            <span className="flex items-center gap-1 text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> TMS
+            <span className="flex items-center gap-1 text-slate-300 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> TMS
             </span>
-            <span className="flex items-center gap-1 text-cyan-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> TDMS
+            <span className="flex items-center gap-1 text-slate-300 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> TDMS
             </span>
-            <span className="flex items-center gap-1 text-amber-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> SMMS
+            <span className="flex items-center gap-1 text-slate-300 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> SMMS
             </span>
-            <span className="flex items-center gap-1 text-purple-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" /> COA
+            <span className="flex items-center gap-1 text-slate-300 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400" /> COA
             </span>
           </div>
 
           {/* Live FastAPI Backend Status Indicator */}
           <div
-            className="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-1.5 rounded-lg border border-emerald-500/40 text-[11px] font-mono shadow-sm"
-            title="FastAPI Backend Live on http://127.0.0.1:8000 • RandomForest & GradientBoosting Models Active"
+            className="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-700 text-[11px] font-mono shadow-sm"
+            title="FastAPI Backend Live on http://127.0.0.1:8000 • Operational Research & ML Engines Active"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="text-emerald-300 font-bold hidden sm:inline">Backend: Online</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-emerald-300 font-semibold hidden sm:inline">Backend: Online</span>
             <span className="text-slate-400 text-[10px] hidden md:inline">(Port 8000)</span>
           </div>
 
@@ -211,9 +208,8 @@ export default function Header({
           ) : nextStep ? (
             <button
               onClick={() => setActiveModule(nextStep.module)}
-              className="px-3 py-1.5 rounded-lg bg-purple-600/90 hover:bg-purple-600 text-white text-xs font-medium flex items-center gap-1.5 shadow-md hover:shadow-purple-900/40 border border-purple-400/30 transition cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium flex items-center gap-1.5 shadow-sm border border-blue-500/40 transition cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
               <span>Next: {nextStep.label}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
