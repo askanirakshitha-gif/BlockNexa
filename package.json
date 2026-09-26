@@ -1,0 +1,10 @@
+{
+  "name": "blocknexa-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix BlockNexa run dev",
+    "build": "npm --prefix BlockNexa run build",
+    "start": "npm --prefix BlockNexa run dev"
+  }
+}
