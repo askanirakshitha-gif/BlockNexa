@@ -16,6 +16,8 @@ import {
   AlertOctagon,
   Zap,
   Gauge,
+  MapPin,
+  GitBranch,
 } from 'lucide-react';
 
 export default function DashboardModule({
@@ -59,11 +61,19 @@ export default function DashboardModule({
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
-              onClick={() => onNavigate('requests')}
+              onClick={() => onNavigate('pipeline')}
+              className="px-4 py-2.5 rounded-xl bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 text-xs font-semibold border border-indigo-700/60 flex items-center gap-2 transition cursor-pointer"
+            >
+              <GitBranch className="w-4 h-4 text-indigo-400" />
+              <span>7-Stage Blueprint</span>
+            </button>
+
+            <button
+              onClick={() => onNavigate('map')}
               className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center gap-2 transition cursor-pointer"
             >
-              <Wrench className="w-4 h-4 text-blue-400" />
-              <span>Review Requests ({pendingRequests.length})</span>
+              <MapPin className="w-4 h-4 text-cyan-400" />
+              <span>Railway Map (GIS)</span>
             </button>
 
             <button

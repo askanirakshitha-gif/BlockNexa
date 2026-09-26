@@ -133,6 +133,18 @@ export default function FinalPlanModal({ isOpen, onClose, currentUser }) {
             </div>
           </div>
 
+          {/* BDMS Memo & COA Slot Reservation Details */}
+          <div className="p-3 rounded-xl bg-slate-100 border border-slate-300 text-xs space-y-1 font-mono">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] text-slate-800">
+              <span><strong>BDMS Disconnection Memo:</strong> #BDMS/BSL/2026/0926-08</span>
+              <span className="text-emerald-700 font-bold">STATUS: DISPATCHED & ACKNOWLEDGED</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] text-slate-800">
+              <span><strong>COA Timetable Path Reservation:</strong> #COA/RES/DN-MAIN/1045-1345</span>
+              <span className="text-purple-700 font-bold">STATUS: LOCKED IN LIVE TIMETABLE</span>
+            </div>
+          </div>
+
           {/* Train Regulation Orders */}
           <div className="text-xs space-y-1.5">
             <div className="font-bold text-slate-950 uppercase tracking-wider text-[11px] border-b pb-1">

@@ -20,6 +20,14 @@ cd BlockNexa
 npm run dev
 ```
 
+### 🛰️ Live Open-Source Dataset Ingestion:
+BlockNexa uses real-world railway failure telemetry from the Hugging Face dataset [`samyuktha01/Indian_Railway_maintance`](https://huggingface.co/datasets/samyuktha01/Indian_Railway_maintance) (CC BY 4.0, 100K records). To re-sync or refresh the dataset:
+```bash
+# Run from BlockNexa folder:
+python scripts/import_hf_dataset.py
+```
+This parses the 100K dataset, isolates Central Railway (CR) records requiring maintenance, computes Composite Priority Index (CPI) scores, and exports to `src/data/huggingfaceMaintenanceData.js`.
+
 ---
 
 ## 🧭 How BlockNexa Works (In Simple Words)

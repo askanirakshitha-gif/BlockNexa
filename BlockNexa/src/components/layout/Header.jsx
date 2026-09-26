@@ -18,29 +18,32 @@ import {
   FileCheck2,
   Bell,
   RefreshCw,
+  MapPin,
+  GitBranch,
 } from 'lucide-react';
 
 export const MODULES = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, badge: null },
-  { id: 'requests', label: 'Maintenance Requests', icon: Wrench, badge: '7 Reqs' },
-  { id: 'planner', label: 'AI Block Planner', icon: Cpu, badge: 'CORE', badgeColor: 'bg-purple-600 text-white animate-pulse' },
-  { id: 'gantt', label: 'Gantt / Schedule', icon: CalendarDays, badge: 'Live' },
-  { id: 'impact', label: 'Train Impact', icon: TrainTrack, badge: '6 Trains' },
+  { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, badge: null },
+  { id: 'pipeline', label: 'Architecture', icon: GitBranch, badge: '7 Stages', badgeColor: 'bg-indigo-600 text-white' },
+  { id: 'map', label: '1. Railway Map', icon: MapPin, badge: 'GIS' },
+  { id: 'requests', label: '2. Maintenance Hub', icon: Wrench, badge: 'CPI' },
+  { id: 'planner', label: '3. AI Optimizer', icon: Cpu, badge: 'MILP', badgeColor: 'bg-purple-600 text-white animate-pulse' },
+  { id: 'gantt', label: '4. Master Schedule', icon: CalendarDays, badge: '3 Horizons' },
+  { id: 'safety', label: '5. Safety & Sanction', icon: ShieldCheck, badge: 'BDMS' },
+  { id: 'simulation', label: '6. Re-planner & Audit', icon: SlidersHorizontal, badge: 'Rolling' },
   { id: 'conflicts', label: 'Conflict Center', icon: AlertTriangle, badge: '3 Alerts', badgeColor: 'bg-red-500 text-white' },
-  { id: 'assets', label: 'Asset Intelligence', icon: Activity, badge: '94.2%' },
-  { id: 'simulation', label: 'Simulation / Replanning', icon: SlidersHorizontal, badge: 'Sandbox' },
-  { id: 'safety', label: 'Safety & Approval', icon: ShieldCheck, badge: 'Gate' },
+  { id: 'impact', label: 'Train Impact', icon: TrainTrack, badge: 'COA' },
 ];
 
 export const WORKFLOW_STEPS = [
-  { id: 'dashboard', label: '1. Overview', module: 'dashboard' },
-  { id: 'requests', label: '2. Field Requisitions', module: 'requests' },
-  { id: 'planner', label: '3. AI Optimization', module: 'planner' },
-  { id: 'conflicts', label: '4. Conflict Resolution', module: 'conflicts' },
-  { id: 'gantt', label: '5. Gantt Slotting', module: 'gantt' },
-  { id: 'impact', label: '6. Train Mitigation', module: 'impact' },
-  { id: 'simulation', label: '7. What-If Replanning', module: 'simulation' },
-  { id: 'safety', label: '8. Safety & Approval', module: 'safety' },
+  { id: 'dashboard', label: 'Overview', module: 'dashboard' },
+  { id: 'pipeline', label: '7-Stage Blueprint', module: 'pipeline' },
+  { id: 'map', label: '1. Railway Map & Infra', module: 'map' },
+  { id: 'requests', label: '2. Maintenance Hub', module: 'requests' },
+  { id: 'planner', label: '3. AI Optimizer', module: 'planner' },
+  { id: 'gantt', label: '4. Master Schedule', module: 'gantt' },
+  { id: 'safety', label: '5. Safety & Sanction', module: 'safety' },
+  { id: 'simulation', label: '6. Re-planner & Audit', module: 'simulation' },
 ];
 
 export default function Header({
@@ -119,6 +122,19 @@ export default function Header({
             <span className="flex items-center gap-1 text-purple-400">
               <span className="w-1.5 h-1.5 rounded-full bg-purple-400" /> COA
             </span>
+          </div>
+
+          {/* Live FastAPI Backend Status Indicator */}
+          <div
+            className="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-1.5 rounded-lg border border-emerald-500/40 text-[11px] font-mono shadow-sm"
+            title="FastAPI Backend Live on http://127.0.0.1:8000 • RandomForest & GradientBoosting Models Active"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-emerald-300 font-bold hidden sm:inline">Backend: Online</span>
+            <span className="text-slate-400 text-[10px] hidden md:inline">(Port 8000)</span>
           </div>
 
           {/* Clock */}

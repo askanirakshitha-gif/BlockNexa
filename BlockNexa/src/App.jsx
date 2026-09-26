@@ -11,6 +11,8 @@ import AssetIntelligenceModule from './components/modules/AssetIntelligenceModul
 import SimulationReplanningModule from './components/modules/SimulationReplanningModule';
 import SafetyValidationModule from './components/modules/SafetyValidationModule';
 import FinalPlanModal from './components/modules/FinalPlanModal';
+import PipelineArchitectureModule from './components/modules/PipelineArchitectureModule';
+import RailwayMapModule from './components/modules/RailwayMapModule';
 
 import {
   INITIAL_MAINTENANCE_REQUESTS,
@@ -27,7 +29,7 @@ export default function App() {
 
   // Shared state
   const [maintenanceRequests, setMaintenanceRequests] = useState(INITIAL_MAINTENANCE_REQUESTS);
-  const [selectedRequestIds, setSelectedRequestIds] = useState(['REQ-TMS-1082', 'REQ-TDMS-4091', 'REQ-SMMS-2104']);
+  const [selectedRequestIds, setSelectedRequestIds] = useState(['REQ-TMS-217', 'REQ-TDMS-120', 'REQ-SMMS-104']);
   const [activeBlocks, setActiveBlocks] = useState(ACTIVE_BLOCKS_TODAY);
   const [conflicts, setConflicts] = useState(CONFLICTS_DATA);
   const [isOptimized, setIsOptimized] = useState(true);
@@ -81,6 +83,16 @@ export default function App() {
             isOptimized={isOptimized}
             isPlanApproved={isPlanApproved}
           />
+        )}
+
+        {/* Module 0: Pipeline Architecture Blueprint */}
+        {activeModule === 'pipeline' && (
+          <PipelineArchitectureModule onNavigate={setActiveModule} />
+        )}
+
+        {/* Module 1: Railway Map & Infrastructure Layer */}
+        {activeModule === 'map' && (
+          <RailwayMapModule onNavigate={setActiveModule} />
         )}
 
         {/* Module 2: Maintenance Requests */}
