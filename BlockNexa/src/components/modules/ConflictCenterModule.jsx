@@ -74,10 +74,10 @@ export default function ConflictCenterModule({ onNavigate }) {
           {unresolvedCount > 0 && (
             <button
               onClick={handleApplyAll}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-emerald-600 hover:from-purple-500 hover:to-emerald-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-purple-900/30 transition cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-2 shadow-sm border border-blue-500/40 transition cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-yellow-300" />
-              <span>Apply All AI Resolutions ({unresolvedCount})</span>
+              <Zap className="w-4 h-4 text-amber-300" />
+              <span>Apply All Conflict Resolutions ({unresolvedCount})</span>
             </button>
           )}
         </div>
@@ -192,10 +192,10 @@ export default function ConflictCenterModule({ onNavigate }) {
                   ) : (
                     <button
                       onClick={() => handleApplyResolution(c.id)}
-                      className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-purple-950 transition cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm border border-blue-500/30 transition cursor-pointer"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                      <span>Apply AI Resolution</span>
+                      <Zap className="w-3.5 h-3.5 text-amber-300" />
+                      <span>Apply Resolution</span>
                     </button>
                   )}
                 </div>
@@ -226,14 +226,14 @@ export default function ConflictCenterModule({ onNavigate }) {
                 </div>
 
                 {/* Right: AI Recommendation */}
-                <div className="p-4 rounded-xl bg-purple-950/20 border border-purple-800/40 space-y-3 flex flex-col justify-between">
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                        <span>BlockNexa AI Resolution Recommendation</span>
+                      <span className="text-xs font-bold text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <Zap className="w-3.5 h-3.5 text-blue-400" />
+                        <span>BlockNexa Deconfliction Resolution</span>
                       </span>
-                      <span className="text-[10px] font-mono font-bold bg-purple-900/60 text-purple-200 px-2 py-0.5 rounded border border-purple-700">
+                      <span className="text-[10px] font-mono font-bold bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">
                         {c.confidence} Confidence
                       </span>
                     </div>
@@ -243,7 +243,7 @@ export default function ConflictCenterModule({ onNavigate }) {
                     </p>
                   </div>
 
-                  <div className="pt-2 border-t border-purple-900/40 flex flex-wrap items-center justify-between text-xs text-emerald-400 font-mono gap-2">
+                  <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between text-xs text-emerald-400 font-mono gap-2">
                     <span>
                       <strong>Slot:</strong> {c.recommendedSlot}
                     </span>

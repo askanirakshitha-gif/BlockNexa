@@ -13,6 +13,7 @@ import SafetyValidationModule from './components/modules/SafetyValidationModule'
 import FinalPlanModal from './components/modules/FinalPlanModal';
 import PipelineArchitectureModule from './components/modules/PipelineArchitectureModule';
 import RailwayMapModule from './components/modules/RailwayMapModule';
+import AdvancedCapabilitiesModule from './components/modules/AdvancedCapabilitiesModule';
 
 import {
   INITIAL_MAINTENANCE_REQUESTS,
@@ -149,6 +150,11 @@ export default function App() {
             setIsPlanApproved={setIsPlanApproved}
             onOpenFinalPlan={() => setIsFinalPlanModalOpen(true)}
           />
+        )}
+
+        {/* Module 10: Advanced Capabilities (6 Cutting-Edge Value-Adds) */}
+        {activeModule === 'advanced' && (
+          <AdvancedCapabilitiesModule onNavigate={setActiveModule} />
         )}
       </main>
 

@@ -58,7 +58,7 @@ export default function GanttScheduleModule({ onNavigate }) {
           id: 'BLK-OPT-01',
           name: 'Joint Mega Block: TMS + TDMS + SMMS',
           dept: 'Joint (P-Way + OHE + Sig)',
-          color: 'bg-purple-600/90 text-white border-purple-400 shadow-purple-950/50',
+          color: 'bg-blue-600/90 text-white border-blue-400 shadow-sm',
           typeBadge: 'AI-Selected Joint Window',
           start: '10:45',
           end: '13:45',
@@ -114,7 +114,7 @@ export default function GanttScheduleModule({ onNavigate }) {
           name: 'Duronto Exp',
           entryTime: '13:20',
           exitTime: '13:48',
-          color: 'border-purple-400 bg-purple-500/20 text-purple-300',
+          color: 'border-sky-400 bg-sky-500/20 text-sky-300',
         },
       ],
     },
@@ -248,7 +248,7 @@ export default function GanttScheduleModule({ onNavigate }) {
           <button
             onClick={() => setTimeView('Weekly')}
             className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 cursor-pointer ${
-              timeView === 'Weekly' ? 'bg-purple-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              timeView === 'Weekly' ? 'bg-blue-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
@@ -257,7 +257,7 @@ export default function GanttScheduleModule({ onNavigate }) {
           <button
             onClick={() => setTimeView('Monthly')}
             className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 cursor-pointer ${
-              timeView === 'Monthly' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+              timeView === 'Monthly' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'
             }`}
           >
             <CalendarDays className="w-3.5 h-3.5" />
@@ -290,7 +290,7 @@ export default function GanttScheduleModule({ onNavigate }) {
 
             <div className="flex items-center gap-4 text-slate-400 font-mono text-[11px]">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded bg-purple-500" /> Joint Mega Block
+                <span className="w-2.5 h-2.5 rounded bg-blue-500" /> Joint Mega Block
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded bg-amber-500" /> P-Way
@@ -444,7 +444,7 @@ export default function GanttScheduleModule({ onNavigate }) {
                   Overdue work queues, equipment/crew rosters, 7-day freight flow projections, and inter-departmental work bundling
                 </p>
               </div>
-              <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-purple-950 text-purple-300 border border-purple-800">
+              <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800">
                 Divisional Circular Ready
               </span>
             </div>
@@ -457,7 +457,7 @@ export default function GanttScheduleModule({ onNavigate }) {
               </div>
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400 block">Bundled Joint Blocks</span>
-                <span className="text-xl font-bold font-mono text-purple-400">{PLANNING_HORIZONS_DATA.weeklyTactical.metrics.bundledBlocksScheduled} Windows</span>
+                <span className="text-xl font-bold font-mono text-blue-400">{PLANNING_HORIZONS_DATA.weeklyTactical.metrics.bundledBlocksScheduled} Windows</span>
               </div>
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400 block">Passenger Cancellations</span>
@@ -494,7 +494,7 @@ export default function GanttScheduleModule({ onNavigate }) {
                       </div>
                       <div>
                         <span className="text-slate-500 block text-[10px]">Corridor Possession</span>
-                        <span className="text-purple-300 font-mono font-bold">{dayPlan.trackHours}</span>
+                        <span className="text-blue-300 font-mono font-bold">{dayPlan.trackHours}</span>
                       </div>
                       <div>
                         <span className="text-slate-500 block text-[10px]">Bundling Rate</span>
@@ -552,7 +552,7 @@ export default function GanttScheduleModule({ onNavigate }) {
               </div>
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400 block">Major Mega-Blocks</span>
-                <span className="text-xl font-bold font-mono text-purple-400">{PLANNING_HORIZONS_DATA.monthlyStrategic.metrics.majorMegaBlocksPlanned} Planned</span>
+                <span className="text-xl font-bold font-mono text-blue-400">{PLANNING_HORIZONS_DATA.monthlyStrategic.metrics.majorMegaBlocksPlanned} Planned</span>
               </div>
             </div>
 
@@ -594,8 +594,8 @@ export default function GanttScheduleModule({ onNavigate }) {
           <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="p-2 rounded-lg bg-purple-950 text-purple-300 border border-purple-800">
-                  <Sparkles className="w-4 h-4 text-yellow-300" />
+                <span className="p-2 rounded-lg bg-blue-950 text-blue-300 border border-blue-800">
+                  <Layers className="w-4 h-4 text-blue-300" />
                 </span>
                 <div>
                   <h3 className="text-base font-bold text-white">{selectedBlock.name}</h3>
@@ -618,7 +618,7 @@ export default function GanttScheduleModule({ onNavigate }) {
                 <span className="font-mono font-bold text-white text-sm">
                   {selectedBlock.start} — {selectedBlock.end}
                 </span>
-                <span className="text-[10px] text-purple-400 block">({selectedBlock.duration})</span>
+                <span className="text-[10px] text-blue-400 block">({selectedBlock.duration})</span>
               </div>
 
               <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
@@ -642,8 +642,8 @@ export default function GanttScheduleModule({ onNavigate }) {
                 <div className="text-slate-400 text-[11px]">{selectedBlock.gang}</div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-purple-950/30 border border-purple-900/60">
-                <span className="text-purple-300 font-semibold block mb-1">
+              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                <span className="text-blue-300 font-semibold block mb-1">
                   Train Regulation Plan
                 </span>
                 <div className="space-y-1 text-slate-300">
