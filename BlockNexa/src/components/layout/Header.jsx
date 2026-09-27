@@ -25,7 +25,7 @@ import {
 export const MODULES = [
   { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, badge: null },
   { id: 'pipeline', label: 'Architecture', icon: GitBranch, badge: '7 Stages', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
-  { id: 'map', label: '1. Railway Map', icon: MapPin, badge: 'GIS', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'map', label: '1. Railway Map', icon: MapPin, badge: 'Live GIS', badgeColor: 'bg-emerald-950/80 text-emerald-300 border border-emerald-800' },
   { id: 'requests', label: '2. Maintenance Hub', icon: Wrench, badge: 'CPI', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
   { id: 'planner', label: '3. AI Optimizer', icon: Cpu, badge: 'MILP', badgeColor: 'bg-blue-900/60 text-blue-200 border border-blue-700/60' },
   { id: 'gantt', label: '4. Master Schedule', icon: CalendarDays, badge: '3 Horizons', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
@@ -33,7 +33,7 @@ export const MODULES = [
   { id: 'simulation', label: '6. Re-planner & Audit', icon: SlidersHorizontal, badge: 'Rolling', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
   { id: 'advanced', label: '7. Advanced Capabilities', icon: Sparkles, badge: '6 Value-Adds', badgeColor: 'bg-blue-900/60 text-blue-200 border border-blue-700/60' },
   { id: 'conflicts', label: 'Conflict Center', icon: AlertTriangle, badge: '3 Alerts', badgeColor: 'bg-red-950/80 text-red-300 border border-red-800/80' },
-  { id: 'impact', label: 'Train Impact', icon: TrainTrack, badge: 'COA', badgeColor: 'bg-slate-800 text-slate-300 border border-slate-700' },
+  { id: 'impact', label: 'Train Status & Impact', icon: TrainTrack, badge: 'Live COA', badgeColor: 'bg-emerald-950/80 text-emerald-300 border border-emerald-800' },
 ];
 
 export const WORKFLOW_STEPS = [

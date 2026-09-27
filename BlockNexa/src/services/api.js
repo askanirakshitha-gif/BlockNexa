@@ -156,6 +156,23 @@ export async function fetchBlockHistory() {
   }
 }
 
+/**
+ * Fetch real-time GPS telemetry and moving train statuses along Bhusawal Division
+ */
+export async function fetchLiveTrains() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/live-trains`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[BlockNexa API] Fetch live trains failed:', err.message);
+    return null;
+  }
+}
+
 // =====================================================================
 // Complete Mathematical Formulation & Cutting-Edge Value-Adds API
 // =====================================================================

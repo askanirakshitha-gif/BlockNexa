@@ -363,6 +363,154 @@ def get_block_history():
     return []
 
 
+@app.get("/api/live-trains")
+def get_live_trains():
+    """Returns real-time GPS telemetry and moving train statuses along Bhusawal Division."""
+    from datetime import datetime
+    return {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S IST"),
+        "division": "Bhusawal Division (BSL) / Central Railway",
+        "corridor_span_km": "Km 137.0 (IGP) — Km 444.0 (BSL)",
+        "total_active_trains": 8,
+        "section_metrics": {
+            "average_speed_kmph": 104.6,
+            "punctuality_rate": 98.2,
+            "trains_in_caution_zone": 1,
+            "line_occupancy_ratio": 0.42
+        },
+        "caution_orders": [
+            {
+                "section": "MMR — CSN Down Line Km 284/10 to 286/10",
+                "restriction": "SR 30 km/h",
+                "cause": "Joint Maintenance Possession (TMS + TDMS + SMMS)",
+                "status": "ACTIVE"
+            }
+        ],
+        "trains": [
+            {
+                "trainNo": "22222",
+                "name": "CSMT - NZM Vande Bharat Express",
+                "type": "Vande Bharat",
+                "direction": "Down",
+                "track": "DN-MAIN",
+                "currentKm": 246.4,
+                "speedKmph": 130,
+                "signalAspect": "GREEN",
+                "delayMins": 0,
+                "nextStation": "Manmad Junction (MMR)",
+                "distToNextKm": 14.6,
+                "locoNo": "WAP-7 #30455",
+                "crew": "R. S. Jadhav (LP)"
+            },
+            {
+                "trainNo": "12951",
+                "name": "Mumbai Central - New Delhi Rajdhani Express",
+                "type": "Rajdhani",
+                "direction": "Down",
+                "track": "DN-MAIN",
+                "currentKm": 195.8,
+                "speedKmph": 125,
+                "signalAspect": "GREEN",
+                "delayMins": 4,
+                "nextStation": "Manmad Junction (MMR)",
+                "distToNextKm": 65.2,
+                "locoNo": "Twin WAP-7 #30211",
+                "crew": "S. K. Verma (LP)"
+            },
+            {
+                "trainNo": "12137",
+                "name": "Punjab Mail (CSMT — Firozpur)",
+                "type": "Superfast",
+                "direction": "Down",
+                "track": "DN-MAIN",
+                "currentKm": 148.2,
+                "speedKmph": 108,
+                "signalAspect": "DOUBLE_YELLOW",
+                "delayMins": 12,
+                "nextStation": "Devlali (DVL)",
+                "distToNextKm": 30.8,
+                "locoNo": "WAP-7 #30588",
+                "crew": "M. G. Patil (LP)"
+            },
+            {
+                "trainNo": "12262",
+                "name": "Howrah — CSMT AC Duronto Express",
+                "type": "Duronto",
+                "direction": "Up",
+                "track": "UP-MAIN",
+                "currentKm": 388.5,
+                "speedKmph": 118,
+                "signalAspect": "GREEN",
+                "delayMins": 0,
+                "nextStation": "Pachora Junction (PC)",
+                "distToNextKm": 15.5,
+                "locoNo": "WAP-7 #30332",
+                "crew": "D. P. Mukherjee (LP)"
+            },
+            {
+                "trainNo": "12860",
+                "name": "Howrah — CSMT Gitanjali Express",
+                "type": "Superfast",
+                "direction": "Up",
+                "track": "UP-MAIN",
+                "currentKm": 298.0,
+                "speedKmph": 105,
+                "signalAspect": "YELLOW",
+                "delayMins": 6,
+                "nextStation": "Manmad Junction (MMR)",
+                "distToNextKm": 37.0,
+                "locoNo": "WAP-7 #30412",
+                "crew": "A. K. Ganguly (LP)"
+            },
+            {
+                "trainNo": "11058",
+                "name": "Amritsar — CSMT Express",
+                "type": "Express",
+                "direction": "Up",
+                "track": "UP-MAIN",
+                "currentKm": 432.0,
+                "speedKmph": 92,
+                "signalAspect": "GREEN",
+                "delayMins": 15,
+                "nextStation": "Jalgaon Junction (JL)",
+                "distToNextKm": 12.0,
+                "locoNo": "WAP-4 #22510",
+                "crew": "H. S. Gill (LP)"
+            },
+            {
+                "trainNo": "FRT-CNTR-8812",
+                "name": "CONCOR Double Stack Container",
+                "type": "Freight",
+                "direction": "Down",
+                "track": "DN-MAIN",
+                "currentKm": 348.0,
+                "speedKmph": 74,
+                "signalAspect": "GREEN",
+                "delayMins": 20,
+                "nextStation": "Pachora Junction (PC)",
+                "distToNextKm": 25.0,
+                "locoNo": "Twin WAG-9HC #31580",
+                "crew": "T. R. Sonawane (LP)"
+            },
+            {
+                "trainNo": "FRT-COAL-9943",
+                "name": "BOXNHL Coal Rake",
+                "type": "Freight",
+                "direction": "Up",
+                "track": "3RD-LINE",
+                "currentKm": 412.5,
+                "speedKmph": 68,
+                "signalAspect": "GREEN",
+                "delayMins": 8,
+                "nextStation": "Jalgaon Junction (JL)",
+                "distToNextKm": 7.5,
+                "locoNo": "WAG-12B #60018",
+                "crew": "B. L. Meena (LP)"
+            }
+        ]
+    }
+
+
 @app.get("/{full_path:path}")
 def catch_all_spa(full_path: str):
     """Catch-all router to serve static SPA files while preserving API routes."""

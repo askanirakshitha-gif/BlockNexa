@@ -632,7 +632,7 @@ export const SPATIAL_INFRASTRUCTURE_DATA = {
   tracks: [
     { code: "DN-MAIN", name: "Down Main Line (IGP -> BSL)", maxSpeed: 130, electrification: "25 kV AC 50 Hz", color: "#3b82f6" },
     { code: "UP-MAIN", name: "Up Main Line (BSL -> IGP)", maxSpeed: 130, electrification: "25 kV AC 50 Hz", color: "#06b6d4" },
-    { code: "3RD-LINE", name: "3rd Corridor / Goods By-pass", maxSpeed: 100, electrification: "25 kV AC 50 Hz", color: "#a855f7" },
+    { code: "3RD-LINE", name: "3rd Corridor / Goods By-pass", maxSpeed: 100, electrification: "25 kV AC 50 Hz", color: "#f59e0b" },
     { code: "LOOP-3", name: "Chalisgaon Bi-directional Loop Line", maxSpeed: 50, electrification: "25 kV AC 50 Hz", color: "#10b981" },
   ],
   isolationZones: [

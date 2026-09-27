@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Wrench,
   AlertTriangle,
@@ -19,6 +19,11 @@ import {
   MapPin,
   GitBranch,
 } from 'lucide-react';
+import {
+  INITIAL_LIVE_TRAINS,
+  updateTrainsLiveMovement,
+} from '../../services/liveTrainSimulationService';
+import { fetchLiveTrains } from '../../services/api';
 
 export default function DashboardModule({
   maintenanceRequests,
@@ -33,6 +38,41 @@ export default function DashboardModule({
     (r) => r.severity === 'Critical' || r.severity === 'Emergency'
   );
   const pendingRequests = maintenanceRequests.filter((r) => r.status.includes('Pending'));
+
+  // Live Train Status state for Dashboard Radar
+  const [liveTrains, setLiveTrains] = useState(INITIAL_LIVE_TRAINS);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchLiveTrains().then((res) => {
+      if (res && res.trains && res.trains.length > 0 && isMounted) {
+        setLiveTrains((prev) =>
+          prev.map((initT) => {
+            const remote = res.trains.find((rt) => rt.trainNo === initT.trainNo);
+            if (remote) {
+              return {
+                ...initT,
+                currentKm: remote.currentKm,
+                speedKmph: remote.speedKmph,
+                signalAspect: remote.signalAspect,
+                delayMins: remote.delayMins,
+              };
+            }
+            return initT;
+          })
+        );
+      }
+    });
+
+    const interval = setInterval(() => {
+      setLiveTrains((prev) => updateTrainsLiveMovement(prev, 1.0, 10));
+    }, 1000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -262,6 +302,72 @@ export default function DashboardModule({
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="text-slate-400">{block.safetyStatus}</span>
                     <span className="font-semibold text-amber-300">{block.cautionOrder}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Live Train Movement & Corridor Tracking Widget */}
+          <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-5 shadow-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <span>Live Corridor Train Movement & GPS Status</span>
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                    COA Live
+                  </span>
+                </h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => onNavigate('impact')}
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium cursor-pointer"
+                >
+                  <span>Train Status Console</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => onNavigate('map')}
+                  className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-medium cursor-pointer"
+                >
+                  <span>View on GIS Map</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {liveTrains.slice(0, 4).map((train) => (
+                <div
+                  key={train.trainNo}
+                  onClick={() => onNavigate('map')}
+                  className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-blue-500/60 transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between gap-1 mb-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-mono font-bold text-cyan-300 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">
+                        {train.trainNo}
+                      </span>
+                      <span className="text-xs font-bold text-white truncate max-w-[110px]">
+                        {train.name.split(' ')[0]}
+                      </span>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-emerald-400">
+                      {train.speedKmph} km/h
+                    </span>
+                  </div>
+
+                  <div className="text-[11px] text-slate-400 truncate mb-2">
+                    {train.status}
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 border-t border-slate-900 pt-1.5">
+                    <span>Km {train.currentKm} • {train.track}</span>
+                    <span className={train.signalAspect === 'GREEN' ? 'text-emerald-400' : 'text-amber-400'}>
+                      ● {train.signalAspect}
+                    </span>
                   </div>
                 </div>
               ))}
