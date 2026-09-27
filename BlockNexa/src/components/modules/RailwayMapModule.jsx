@@ -31,6 +31,8 @@ import {
   RefreshCw,
   Clock,
   Check,
+  ShieldCheck,
+  Flame,
 } from 'lucide-react';
 import {
   SPATIAL_INFRASTRUCTURE_DATA,
@@ -44,10 +46,12 @@ import {
 import { fetchLiveTrains } from '../../services/api';
 
 export default function RailwayMapModule({ onNavigate }) {
+  // Navigation & Inspector Selection State
   const [selectedStation, setSelectedStation] = useState(SPATIAL_INFRASTRUCTURE_DATA.stations[3]); // Manmad Jn
-  const [selectedCluster, setSelectedCluster] = useState(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[0]);
-  const [selectedAsset, setSelectedAsset] = useState(ASSET_INTELLIGENCE_METRICS.highFailureRiskAssets[0]);
+  const [selectedCluster, setSelectedCluster] = useState(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[1]); // Default to NS Arc Km 210
+  const [activeInspectorType, setActiveInspectorType] = useState('CLUSTER'); // 'CLUSTER' | 'TRAIN' | 'STATION'
   const [activeLayer, setActiveLayer] = useState('ALL'); // ALL, TRAINS, TRACK, OHE, SIGNAL, CLUSTERS
+  const [sanctionSuccessMsg, setSanctionSuccessMsg] = useState(null);
 
   // Live Train Simulation & Telemetry State
   const [trains, setTrains] = useState(INITIAL_LIVE_TRAINS);
@@ -55,7 +59,6 @@ export default function RailwayMapModule({ onNavigate }) {
   const [isLiveMoving, setIsLiveMoving] = useState(true);
   const [simSpeed, setSimSpeed] = useState(10); // 10x default speed
   const [reroutedTrainIds, setReroutedTrainIds] = useState([]);
-  const [liveDataSource, setLiveDataSource] = useState('LOCAL_SIM');
   const [lastHeartbeat, setLastHeartbeat] = useState(new Date().toLocaleTimeString());
 
   // Total corridor span: Km 137 to Km 444 (307 km span)
@@ -85,7 +88,6 @@ export default function RailwayMapModule({ onNavigate }) {
             return initT;
           })
         );
-        setLiveDataSource('FASTAPI_COA_FEED');
       }
     });
     return () => {
@@ -105,7 +107,6 @@ export default function RailwayMapModule({ onNavigate }) {
           simSpeed,
           reroutedTrainIds
         );
-        // Refresh selected train pointer with live data
         if (selectedTrain) {
           const freshSelected = updated.find((t) => t.trainNo === selectedTrain.trainNo);
           if (freshSelected) {
@@ -134,7 +135,7 @@ export default function RailwayMapModule({ onNavigate }) {
 
   const handleFocusTrain = (train) => {
     setSelectedTrain(train);
-    // Find closest station to this train
+    setActiveInspectorType('TRAIN');
     const closestStation = SPATIAL_INFRASTRUCTURE_DATA.stations.reduce((prev, curr) =>
       Math.abs(curr.chainageKm - train.currentKm) < Math.abs(prev.chainageKm - train.currentKm) ? curr : prev
     );
@@ -256,7 +257,7 @@ export default function RailwayMapModule({ onNavigate }) {
               </span>
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Click any train capsule to inspect real-time loco telemetry, or click stations and spatial clusters to view electrical isolation limits
+              Click any element on the schematic — <strong>Red Neutral Section (Km 210)</strong>, <strong>Yellow BCM Ghat (Km 142)</strong>, <strong>Blue Cluster 1</strong>, trains, or stations — to inspect full telemetry below.
             </p>
           </div>
 
@@ -281,7 +282,7 @@ export default function RailwayMapModule({ onNavigate }) {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/80 text-emerald-300 font-mono font-bold">
               <span className={`w-2 h-2 rounded-full bg-emerald-400 ${isLiveMoving ? 'animate-pulse' : ''}`} />
-              <span>{isLiveMoving ? 'LIVE GPS TELEMETRY STREAM' : 'SIMULATION PAUSED'}</span>
+              <span>LIVE GPS TELEMETRY STREAM</span>
             </div>
             <div className="hidden sm:flex items-center gap-3 text-slate-400 font-mono text-[11px]">
               <span>Active: <strong className="text-white">{trains.length} Trains</strong></span>
@@ -361,7 +362,10 @@ export default function RailwayMapModule({ onNavigate }) {
                   key={stn.code}
                   className="absolute top-0 -translate-x-1/2 flex flex-col items-center cursor-pointer group"
                   style={{ left: `${pos}%` }}
-                  onClick={() => setSelectedStation(stn)}
+                  onClick={() => {
+                    setSelectedStation(stn);
+                    setActiveInspectorType('STATION');
+                  }}
                 >
                   <span className="text-[10px] font-mono text-slate-400 group-hover:text-blue-300 transition">
                     Km {stn.chainageKm}
@@ -372,7 +376,7 @@ export default function RailwayMapModule({ onNavigate }) {
             })}
           </div>
 
-          {/* 4 Tracks Horizontal Lines with Live Moving Trains */}
+          {/* 4 Tracks Horizontal Lines with Live Moving Trains & Interactive Clusters */}
           <div className="space-y-7 relative">
             {/* Track 1: Down Main Line */}
             <div className="relative flex items-center">
@@ -384,26 +388,36 @@ export default function RailwayMapModule({ onNavigate }) {
                 {SPATIAL_INFRASTRUCTURE_DATA.stations.map((stn) => (
                   <div
                     key={stn.code}
-                    onClick={() => setSelectedStation(stn)}
+                    onClick={() => {
+                      setSelectedStation(stn);
+                      setActiveInspectorType('STATION');
+                    }}
                     className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-900 border-2 border-blue-400 hover:border-yellow-400 hover:scale-125 transition cursor-pointer shadow-md z-10"
                     style={{ left: `${kmToPercent(stn.chainageKm)}%` }}
                     title={`${stn.name} (${stn.code}) - Km ${stn.chainageKm}`}
                   />
                 ))}
 
-                {/* Spatial Cluster 1 Overlay (Km 284.2 to 286.0) */}
+                {/* Spatial Cluster 1 Overlay (Blue Box: Km 284.2 to 286.0) */}
                 {(activeLayer === 'ALL' || activeLayer === 'CLUSTERS' || activeLayer === 'TRACK') && (
                   <div
-                    onClick={() => setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[0])}
-                    className="absolute -top-3.5 h-10 rounded-lg bg-blue-600/30 border-2 border-blue-400 hover:bg-blue-600/50 transition cursor-pointer shadow-md flex items-center justify-center px-2 text-[10px] font-bold text-white z-0"
+                    onClick={() => {
+                      setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[0]);
+                      setActiveInspectorType('CLUSTER');
+                    }}
+                    className={`absolute -top-3.5 h-10 rounded-lg border-2 transition-all cursor-pointer shadow-md flex items-center justify-center px-2 text-[10px] font-bold text-white z-20 ${
+                      activeInspectorType === 'CLUSTER' && selectedCluster?.clusterId === 'CLUS-01'
+                        ? 'bg-blue-600 ring-4 ring-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.9)] scale-105'
+                        : 'bg-blue-600/40 border-blue-400 hover:bg-blue-600/60 hover:scale-105'
+                    }`}
                     style={{
                       left: `${kmToPercent(284.2)}%`,
-                      width: `${Math.max(4, kmToPercent(286.0) - kmToPercent(284.2) + 6)}%`,
+                      minWidth: '120px',
                     }}
-                    title="Joint Maintenance Cluster 1 (MMR-CSN) • SR 30 km/h in force"
+                    title="Joint Maintenance Cluster 1 (MMR-CSN) • Click to inspect"
                   >
-                    <span className="hidden sm:inline">Cluster 1 (TMS+TDMS+SMMS) • SR 30</span>
-                    <span className="sm:hidden">C1</span>
+                    <span className="hidden sm:inline">Cluster 1 (TMS+TDMS) • SR 30</span>
+                    <span className="sm:hidden">C1 (SR 30)</span>
                   </div>
                 )}
 
@@ -412,7 +426,7 @@ export default function RailwayMapModule({ onNavigate }) {
                   trains
                     .filter((t) => t.track === 'DN-MAIN')
                     .map((t) => {
-                      const isSelected = selectedTrain?.trainNo === t.trainNo;
+                      const isSelected = activeInspectorType === 'TRAIN' && selectedTrain?.trainNo === t.trainNo;
                       const isCaution = t.speedKmph <= 40 && t.status.includes('Caution');
                       const percent = kmToPercent(t.currentKm);
 
@@ -422,13 +436,13 @@ export default function RailwayMapModule({ onNavigate }) {
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedTrain(t);
+                            setActiveInspectorType('TRAIN');
                           }}
-                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-all duration-500 cursor-pointer group"
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-25 transition-all duration-500 cursor-pointer group"
                           style={{ left: `${percent}%` }}
                         >
-                          {/* Pulsing ring when selected */}
                           {isSelected && (
-                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/40 animate-ping pointer-events-none" />
+                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/50 animate-ping pointer-events-none" />
                           )}
 
                           <div
@@ -440,7 +454,6 @@ export default function RailwayMapModule({ onNavigate }) {
                                 : 'bg-slate-900 text-white border-blue-400 hover:border-white hover:scale-110'
                             }`}
                           >
-                            {/* Signal Aspect Light */}
                             <span
                               className={`w-2 h-2 rounded-full shrink-0 ${
                                 t.signalAspect === 'GREEN'
@@ -458,8 +471,7 @@ export default function RailwayMapModule({ onNavigate }) {
                             <span className="text-[8px] text-slate-400">→</span>
                           </div>
 
-                          {/* Hover Tooltip */}
-                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-30 pointer-events-none">
+                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-35 pointer-events-none">
                             <div className="bg-slate-950/95 text-white border border-slate-700 px-2.5 py-1 rounded-lg shadow-xl text-[11px] space-y-0.5">
                               <div className="font-bold text-cyan-300 flex items-center gap-1.5">
                                 <span>{t.trainNo}</span>
@@ -488,40 +500,58 @@ export default function RailwayMapModule({ onNavigate }) {
                 {SPATIAL_INFRASTRUCTURE_DATA.stations.map((stn) => (
                   <div
                     key={stn.code}
-                    onClick={() => setSelectedStation(stn)}
+                    onClick={() => {
+                      setSelectedStation(stn);
+                      setActiveInspectorType('STATION');
+                    }}
                     className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-900 border-2 border-cyan-400 hover:border-yellow-400 hover:scale-125 transition cursor-pointer shadow-md z-10"
                     style={{ left: `${kmToPercent(stn.chainageKm)}%` }}
                   />
                 ))}
 
-                {/* Neutral Section at Km 210/14 (Emergency Flashover) */}
-                {(activeLayer === 'ALL' || activeLayer === 'OHE') && (
+                {/* RED BOX: Neutral Section at Km 210/14 (Emergency Flashover - CLUS-02) */}
+                {(activeLayer === 'ALL' || activeLayer === 'OHE' || activeLayer === 'CLUSTERS') && (
                   <div
-                    onClick={() => setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[1])}
-                    className="absolute -top-4 h-11 px-2 rounded-lg bg-red-600/40 border-2 border-red-500 animate-pulse hover:bg-red-600/60 transition cursor-pointer flex items-center gap-1 text-[10px] font-bold text-white shadow-lg shadow-red-950 z-0"
+                    onClick={() => {
+                      setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[1]);
+                      setActiveInspectorType('CLUSTER');
+                    }}
+                    className={`absolute -top-4 h-11 px-2.5 rounded-lg border-2 transition-all cursor-pointer flex items-center gap-1.5 text-[10px] font-bold text-white shadow-xl z-20 ${
+                      activeInspectorType === 'CLUSTER' && selectedCluster?.clusterId === 'CLUS-02'
+                        ? 'bg-red-600 ring-4 ring-red-400 shadow-[0_0_25px_rgba(239,68,68,0.95)] scale-110'
+                        : 'bg-red-600/70 border-red-500 animate-pulse hover:bg-red-600 hover:scale-105'
+                    }`}
                     style={{
                       left: `${kmToPercent(210.2)}%`,
-                      width: `${Math.max(3, kmToPercent(211.5) - kmToPercent(210.2) + 4)}%`,
+                      minWidth: '95px',
                     }}
-                    title="Emergency Neutral Section Flashover (Km 210/14)"
+                    title="Emergency Neutral Section Flashover (Km 210/14) • Click to inspect"
                   >
-                    <Zap className="w-3 h-3 text-yellow-300 shrink-0" />
-                    <span className="truncate">NS Arc Km 210</span>
+                    <Zap className="w-3.5 h-3.5 text-yellow-300 shrink-0 animate-bounce" />
+                    <span className="whitespace-nowrap font-mono font-bold">NS Arc Km 210</span>
                   </div>
                 )}
 
-                {/* Night Shadow Screening at Km 142.1 (IGP-DVL) */}
-                {(activeLayer === 'ALL' || activeLayer === 'TRACK') && (
+                {/* YELLOW BOX: Night Shadow Deep Ballast Screening at Km 142.1 (BCM Ghat - CLUS-03) */}
+                {(activeLayer === 'ALL' || activeLayer === 'TRACK' || activeLayer === 'CLUSTERS') && (
                   <div
-                    onClick={() => setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[2])}
-                    className="absolute -top-3.5 h-10 px-2 rounded-lg bg-amber-600/30 border-2 border-amber-400 hover:bg-amber-600/50 transition cursor-pointer flex items-center text-[10px] font-bold text-white shadow-md z-0"
+                    onClick={() => {
+                      setSelectedCluster(SPATIAL_INFRASTRUCTURE_DATA.spatialClusters[2]);
+                      setActiveInspectorType('CLUSTER');
+                    }}
+                    className={`absolute -top-3.5 h-10 px-2.5 rounded-lg border-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 text-[10px] font-bold text-white shadow-xl z-20 ${
+                      activeInspectorType === 'CLUSTER' && selectedCluster?.clusterId === 'CLUS-03'
+                        ? 'bg-amber-600 ring-4 ring-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.95)] scale-110'
+                        : 'bg-amber-600/70 border-amber-400 hover:bg-amber-600 hover:scale-105'
+                    }`}
                     style={{
                       left: `${kmToPercent(142.1)}%`,
-                      width: `${Math.max(3, kmToPercent(144.3) - kmToPercent(142.1) + 4)}%`,
+                      minWidth: '85px',
                     }}
-                    title="Deep Screening (Night Window)"
+                    title="Deep Ballast Screening (Night Window) • Click to inspect"
                   >
-                    <span>BCM Ghat</span>
+                    <Wrench className="w-3 h-3 text-amber-200 shrink-0" />
+                    <span className="whitespace-nowrap font-mono font-bold">BCM Ghat</span>
                   </div>
                 )}
 
@@ -530,7 +560,7 @@ export default function RailwayMapModule({ onNavigate }) {
                   trains
                     .filter((t) => t.track === 'UP-MAIN')
                     .map((t) => {
-                      const isSelected = selectedTrain?.trainNo === t.trainNo;
+                      const isSelected = activeInspectorType === 'TRAIN' && selectedTrain?.trainNo === t.trainNo;
                       const isNeutral = t.status.includes('Neutral');
                       const percent = kmToPercent(t.currentKm);
 
@@ -540,12 +570,13 @@ export default function RailwayMapModule({ onNavigate }) {
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedTrain(t);
+                            setActiveInspectorType('TRAIN');
                           }}
-                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-all duration-500 cursor-pointer group"
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-25 transition-all duration-500 cursor-pointer group"
                           style={{ left: `${percent}%` }}
                         >
                           {isSelected && (
-                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/40 animate-ping pointer-events-none" />
+                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/50 animate-ping pointer-events-none" />
                           )}
 
                           <div
@@ -572,7 +603,7 @@ export default function RailwayMapModule({ onNavigate }) {
                             <span className="text-[8px] text-slate-400">←</span>
                           </div>
 
-                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-30 pointer-events-none">
+                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-35 pointer-events-none">
                             <div className="bg-slate-950/95 text-white border border-slate-700 px-2.5 py-1 rounded-lg shadow-xl text-[11px] space-y-0.5">
                               <div className="font-bold text-cyan-300 flex items-center gap-1.5">
                                 <span>{t.trainNo}</span>
@@ -597,12 +628,10 @@ export default function RailwayMapModule({ onNavigate }) {
                 3RD CORR
               </div>
               <div className="relative flex-1 h-3 bg-amber-950/60 border-y border-amber-600/60 rounded">
-                {/* Available between Jalgaon and Bhusawal (Km 395 to 444) */}
                 <div
                   className="absolute inset-y-0 bg-amber-600/30 rounded"
                   style={{ left: `${kmToPercent(395)}%`, right: `${100 - kmToPercent(444)}%` }}
                 />
-                {/* Axle counter anomaly at Km 398 */}
                 {(activeLayer === 'ALL' || activeLayer === 'SIGNAL') && (
                   <div
                     className="absolute -top-3 w-5 h-8 rounded bg-emerald-500/40 border border-emerald-400 flex items-center justify-center cursor-pointer z-10"
@@ -618,7 +647,7 @@ export default function RailwayMapModule({ onNavigate }) {
                   trains
                     .filter((t) => t.track === '3RD-LINE')
                     .map((t) => {
-                      const isSelected = selectedTrain?.trainNo === t.trainNo;
+                      const isSelected = activeInspectorType === 'TRAIN' && selectedTrain?.trainNo === t.trainNo;
                       const percent = kmToPercent(t.currentKm);
 
                       return (
@@ -627,12 +656,13 @@ export default function RailwayMapModule({ onNavigate }) {
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedTrain(t);
+                            setActiveInspectorType('TRAIN');
                           }}
-                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-all duration-500 cursor-pointer group"
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-25 transition-all duration-500 cursor-pointer group"
                           style={{ left: `${percent}%` }}
                         >
                           {isSelected && (
-                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/40 animate-ping pointer-events-none" />
+                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/50 animate-ping pointer-events-none" />
                           )}
 
                           <div
@@ -649,7 +679,7 @@ export default function RailwayMapModule({ onNavigate }) {
                             <span className="text-[8px] text-slate-400">←</span>
                           </div>
 
-                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-30 pointer-events-none">
+                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-35 pointer-events-none">
                             <div className="bg-slate-950/95 text-white border border-slate-700 px-2.5 py-1 rounded-lg shadow-xl text-[11px] space-y-0.5">
                               <div className="font-bold text-amber-300">{t.name}</div>
                               <div className="text-slate-400 font-mono text-[10px]">
@@ -681,7 +711,7 @@ export default function RailwayMapModule({ onNavigate }) {
                   trains
                     .filter((t) => t.track === 'LOOP-3')
                     .map((t) => {
-                      const isSelected = selectedTrain?.trainNo === t.trainNo;
+                      const isSelected = activeInspectorType === 'TRAIN' && selectedTrain?.trainNo === t.trainNo;
                       const percent = kmToPercent(t.currentKm);
 
                       return (
@@ -690,12 +720,13 @@ export default function RailwayMapModule({ onNavigate }) {
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedTrain(t);
+                            setActiveInspectorType('TRAIN');
                           }}
-                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-all duration-500 cursor-pointer group"
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-25 transition-all duration-500 cursor-pointer group"
                           style={{ left: `${percent}%` }}
                         >
                           {isSelected && (
-                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/40 animate-ping pointer-events-none" />
+                            <span className="absolute -inset-1.5 rounded-full bg-yellow-400/50 animate-ping pointer-events-none" />
                           )}
 
                           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold shadow-lg border bg-emerald-700 text-white border-yellow-300 ring-2 ring-emerald-400 scale-105">
@@ -706,7 +737,7 @@ export default function RailwayMapModule({ onNavigate }) {
                             <span className="text-[8px] text-white">LOOP</span>
                           </div>
 
-                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-30 pointer-events-none">
+                          <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap z-35 pointer-events-none">
                             <div className="bg-slate-950/95 text-white border border-slate-700 px-2.5 py-1 rounded-lg shadow-xl text-[11px] space-y-0.5">
                               <div className="font-bold text-emerald-300">{t.name}</div>
                               <div className="text-slate-300 font-mono text-[10px]">
@@ -732,7 +763,10 @@ export default function RailwayMapModule({ onNavigate }) {
                   key={stn.code}
                   className="absolute top-0 -translate-x-1/2 flex flex-col items-center cursor-pointer"
                   style={{ left: `${pos}%` }}
-                  onClick={() => setSelectedStation(stn)}
+                  onClick={() => {
+                    setSelectedStation(stn);
+                    setActiveInspectorType('STATION');
+                  }}
                 >
                   <div className={`w-0.5 h-2 ${isSelected ? 'bg-blue-400' : 'bg-slate-600'}`} />
                   <span
@@ -753,151 +787,439 @@ export default function RailwayMapModule({ onNavigate }) {
           </div>
         </div>
 
-        {/* Selected Train Real-Time GPS Telemetry & Locomotive Diagnostics Card */}
-        {selectedTrain && (
-          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-blue-950/40 to-slate-950 border border-blue-900/60 space-y-4 shadow-xl">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
-                  <Train className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-base font-extrabold text-white tracking-tight">
-                      {selectedTrain.trainNo} • {selectedTrain.name}
-                    </span>
-                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
-                      {selectedTrain.typeLabel || selectedTrain.type}
-                    </span>
-                    <span
-                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                        selectedTrain.signalAspect === 'GREEN'
-                          ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800'
-                          : selectedTrain.signalAspect === 'YELLOW'
-                          ? 'bg-amber-950/80 text-amber-300 border border-amber-800'
-                          : 'bg-yellow-950/80 text-yellow-300 border border-yellow-800'
-                      }`}
-                    >
-                      Aspect: {selectedTrain.signalAspect}
-                    </span>
-                  </div>
-                  <div className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                    <span>
-                      Track: <strong className="text-cyan-300">{selectedTrain.track}</strong>
-                    </span>
-                    <span>•</span>
-                    <span>
-                      Direction: <strong>{selectedTrain.direction === 'DN' ? 'Down (IGP → BSL)' : 'Up (BSL → IGP)'}</strong>
-                    </span>
-                    <span>•</span>
-                    <span className="text-amber-300 font-medium">
-                      Status: {selectedTrain.status}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Live Delay & Speed Badges */}
-              <div className="flex items-center gap-4 shrink-0 font-mono">
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Live Speed</span>
-                  <span className="text-xl font-bold text-cyan-300">
-                    {selectedTrain.speedKmph} <span className="text-xs text-slate-400">/ {selectedTrain.maxSpeed} km/h</span>
-                  </span>
-                </div>
-                <div className="w-px h-8 bg-slate-800" />
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Delay</span>
-                  <span className={`text-xl font-bold ${selectedTrain.delayMins === 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
-                    {selectedTrain.delayMins === 0 ? '0m (On Time)' : `+${selectedTrain.delayMins}m`}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Telemetry Metrics 6 Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-0.5">CURRENT CHAINAGE</span>
-                <span className="text-sm font-bold text-white">Km {selectedTrain.currentKm}</span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">Linear Ref Point</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-0.5">NEXT STATION</span>
-                <span className="text-sm font-bold text-cyan-300 truncate block">{selectedTrain.nextStationCode}</span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">{selectedTrain.distToNextKm} km • ETA {selectedTrain.etaNext || '10:45'}</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-0.5">LOCOMOTIVE</span>
-                <span className="text-sm font-bold text-white truncate block">{selectedTrain.locoNo || 'WAP-7 #30455'}</span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">Electric Shed</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-0.5">LOCO PILOT (LP)</span>
-                <span className="text-sm font-bold text-white truncate block">{selectedTrain.locoPilot || 'Duty Crew'}</span>
-                <span className="text-[10px] text-slate-500 block mt-0.5">Guard: {selectedTrain.guard || 'Assigned'}</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-0.5">TRACTION CURRENT</span>
-                <span className="text-sm font-bold text-amber-400">{selectedTrain.tractionAmps} A</span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">OHE: {selectedTrain.catenaryVoltage} kV</span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-0.5">COMPOSITION</span>
-                <span className="text-sm font-bold text-emerald-400">
-                  {selectedTrain.coaches ? `${selectedTrain.coaches} Coaches` : selectedTrain.wagons ? `${selectedTrain.wagons} Wagons` : 'Coaching'}
-                </span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">
-                  {selectedTrain.passengers ? `~${selectedTrain.passengers} Pax` : selectedTrain.tonnage || 'Freight'}
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Selected Station Telemetry & Electrical Isolation Card */}
-        {selectedStation && (
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-bold text-white">
-                  Station Node: {selectedStation.name} [{selectedStation.code}]
-                </span>
-                <span className="text-xs font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
-                  Chainage: Km {selectedStation.chainageKm}
-                </span>
-              </div>
-              <span className="text-xs text-slate-400">
-                {selectedStation.type} • Platforms: {selectedStation.platforms} • Lines: {selectedStation.lines}
+        {/* ========================================================================= */}
+        {/* INTERACTIVE INSPECTOR SWITCHER TABS & DEDICATED CARDS */}
+        {/* ========================================================================= */}
+        <div className="border-t border-slate-800/80 pt-4 space-y-4">
+          {/* Inspector Mode Switcher */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Telemetry Inspector:
               </span>
+              <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                {/* Cluster / Work Zone Tab */}
+                <button
+                  onClick={() => setActiveInspectorType('CLUSTER')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                    activeInspectorType === 'CLUSTER'
+                      ? selectedCluster?.clusterId === 'CLUS-02'
+                        ? 'bg-red-600 text-white shadow-md'
+                        : selectedCluster?.clusterId === 'CLUS-03'
+                        ? 'bg-amber-600 text-white shadow-md'
+                        : 'bg-blue-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>
+                    Work Zone: {selectedCluster?.clusterId} ({selectedCluster?.clusterId === 'CLUS-02' ? 'Red Arc' : selectedCluster?.clusterId === 'CLUS-03' ? 'Yellow BCM' : 'Blue C1'})
+                  </span>
+                </button>
+
+                {/* Train Tab */}
+                <button
+                  onClick={() => setActiveInspectorType('TRAIN')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                    activeInspectorType === 'TRAIN'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Train className="w-3.5 h-3.5" />
+                  <span>Train: {selectedTrain?.trainNo} ({selectedTrain?.speedKmph} km/h)</span>
+                </button>
+
+                {/* Station Tab */}
+                <button
+                  onClick={() => setActiveInspectorType('STATION')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                    activeInspectorType === 'STATION'
+                      ? 'bg-cyan-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>Station: {selectedStation?.name} [{selectedStation?.code}]</span>
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-slate-400 block font-semibold">Traction Substation:</span>
-                <span className="text-slate-200">
-                  {selectedStation.hasSubstation
-                    ? '25 kV AC Feeding Post Active'
-                    : 'Fed from adjacent sectionalizing post'}
-                </span>
+            <span className="text-[11px] text-slate-500">
+              Click any element on the schematic map above to switch view instantly
+            </span>
+          </div>
+
+          {/* CARD 1: Selected Spatial Work Zone & Cluster Telemetry Card */}
+          {activeInspectorType === 'CLUSTER' && selectedCluster && (
+            <div className={`p-5 rounded-2xl border space-y-4 shadow-2xl transition-all ${
+              selectedCluster.clusterId === 'CLUS-02'
+                ? 'bg-gradient-to-r from-red-950/80 via-slate-950 to-red-950/50 border-red-500/80 shadow-red-950/70'
+                : selectedCluster.clusterId === 'CLUS-03'
+                ? 'bg-gradient-to-r from-amber-950/80 via-slate-950 to-amber-950/50 border-amber-500/80 shadow-amber-950/70'
+                : 'bg-gradient-to-r from-blue-950/80 via-slate-950 to-blue-950/50 border-blue-500/80 shadow-blue-950/70'
+            }`}>
+              {/* Header */}
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`p-3 rounded-xl border ${
+                    selectedCluster.clusterId === 'CLUS-02'
+                      ? 'bg-red-600/30 text-red-300 border-red-500/50'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'bg-amber-600/30 text-amber-300 border-amber-500/50'
+                      : 'bg-blue-600/30 text-blue-300 border-blue-500/50'
+                  }`}>
+                    {selectedCluster.clusterId === 'CLUS-02' ? (
+                      <Zap className="w-6 h-6 text-yellow-300 animate-pulse" />
+                    ) : selectedCluster.clusterId === 'CLUS-03' ? (
+                      <Wrench className="w-6 h-6 text-amber-300" />
+                    ) : (
+                      <Layers className="w-6 h-6 text-blue-300" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">
+                        {selectedCluster.name}
+                      </span>
+                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-white border border-slate-700">
+                        {selectedCluster.clusterId}
+                      </span>
+                      <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                        selectedCluster.clusterId === 'CLUS-02'
+                          ? 'bg-red-950 text-red-300 border border-red-700 animate-pulse'
+                          : selectedCluster.clusterId === 'CLUS-03'
+                          ? 'bg-amber-950 text-amber-300 border border-amber-700'
+                          : 'bg-blue-950 text-blue-300 border border-blue-700'
+                      }`}>
+                        {selectedCluster.urgency}
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-300 mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
+                      <span>
+                        Track Line: <strong className="text-white font-mono">{selectedCluster.lineCode}</strong>
+                      </span>
+                      <span>•</span>
+                      <span>
+                        Corridor Span: <strong className="text-cyan-300 font-mono">{selectedCluster.chainageRange}</strong>
+                      </span>
+                      <span>•</span>
+                      <span>
+                        Power Isolation Zone: <strong className="text-amber-300 font-mono">{selectedCluster.isolationZone}</strong>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status Badges */}
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  {selectedCluster.jointPossessionFeasible && (
+                    <span className="text-xs font-bold font-mono px-3 py-1.5 rounded-xl bg-emerald-950 text-emerald-300 border border-emerald-700 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      +{selectedCluster.synergySavingsMins}m Corridor Delay Averted
+                    </span>
+                  )}
+                  {selectedCluster.clusterId === 'CLUS-02' && (
+                    <span className="text-xs font-bold font-mono px-3 py-1.5 rounded-xl bg-red-950 text-red-300 border border-red-700 flex items-center gap-1.5">
+                      <ShieldAlert className="w-3.5 h-3.5 text-red-400 animate-bounce" />
+                      Strict 0-Amps Catenary Coasting
+                    </span>
+                  )}
+                  {selectedCluster.clusterId === 'CLUS-03' && (
+                    <span className="text-xs font-bold font-mono px-3 py-1.5 rounded-xl bg-amber-950 text-amber-300 border border-amber-700 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-amber-400" />
+                      Night Window (01:15 — 05:15 IST)
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-slate-400 block font-semibold">Interlocking Type:</span>
-                <span className="text-slate-200">Electronic Interlocking (EI) SIL-4 Dual Standby</span>
+
+              {/* 4 Diagnostics Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400 font-mono uppercase tracking-wider block">
+                    Associated Requisitions
+                  </span>
+                  <div className="font-bold text-white font-mono">
+                    {selectedCluster.associatedReqs.join(', ')}
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {selectedCluster.clusterId === 'CLUS-02'
+                      ? 'TRD urgent insulator replacement & flashover mitigation'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'Engineering deep screening & track slew packing'
+                      : 'Joint TMS track pack + TDMS wire + SMMS point throw'}
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400 font-mono uppercase tracking-wider block">
+                    Power Isolation Limits
+                  </span>
+                  <div className="font-bold text-cyan-300 font-mono">
+                    {selectedCluster.clusterId === 'CLUS-02'
+                      ? 'FP-08 Odha (Km 208 — 214)'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'FP-02 Kasara Ghat (Km 140 — 152)'
+                      : 'FP-12 Nandgaon (Km 280 — 295)'}
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {selectedCluster.clusterId === 'CLUS-02'
+                      ? '25 kV cut mandatory; earth discharge rod required'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'Section isolated; diesel shunter escort provided'
+                      : 'Joint power shut-down coordinates all departments'}
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400 font-mono uppercase tracking-wider block">
+                    Speed Restriction
+                  </span>
+                  <div className="font-bold text-amber-300 font-mono">
+                    {selectedCluster.clusterId === 'CLUS-02'
+                      ? 'Coasting 60 — 110 km/h (0 Amps)'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'SR 20 km/h first 2 trains, then 45'
+                      : 'SR 30 km/h through work zone'}
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    Caution order transmitted to all Loco Pilots via COA/TMS
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400 font-mono uppercase tracking-wider block">
+                    Traffic Management Rule
+                  </span>
+                  <div className="font-bold text-emerald-400 font-mono">
+                    {selectedCluster.clusterId === 'CLUS-02'
+                      ? 'Hard Safety Bypass — No Cross-traffic'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'SLW on Down Mainline Active'
+                      : 'Divert VIP Rakes via Loop 3'}
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {selectedCluster.clusterId === 'CLUS-02'
+                      ? 'Flashover protection isolates both catenaries'
+                      : selectedCluster.clusterId === 'CLUS-03'
+                      ? 'Single-line working maintains coaching traffic flow'
+                      : 'Loop 3 frees mainline for uninterrupted tamping'}
+                  </p>
+                </div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-slate-400 block font-semibold">Max Section Speed:</span>
-                <span className="text-emerald-400 font-mono font-bold">130 km/h (Mainline) / 50 km/h (Loop)</span>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-xs">
+                <div className="flex flex-wrap items-center gap-2">
+                  {selectedCluster.clusterId === 'CLUS-02' && (
+                    <button
+                      onClick={() => {
+                        setSanctionSuccessMsg('✓ Emergency Disconnection Memo BDMS-EMG-210 issued. 25 kV AC isolated at FP-08 Odha.');
+                        setTimeout(() => setSanctionSuccessMsg(null), 5000);
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-red-950"
+                    >
+                      <Zap className="w-3.5 h-3.5" />
+                      <span>Sanction Emergency Power Block (25 kV Cut)</span>
+                    </button>
+                  )}
+
+                  {selectedCluster.clusterId === 'CLUS-03' && (
+                    <button
+                      onClick={() => {
+                        setSanctionSuccessMsg('✓ Deep Ballast Possession Sanctioned for Night Window 01:15 - 05:15 IST. SLW Active.');
+                        setTimeout(() => setSanctionSuccessMsg(null), 5000);
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-amber-950"
+                    >
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>Sanction Night Shadow Window</span>
+                    </button>
+                  )}
+
+                  {selectedCluster.clusterId === 'CLUS-01' && (
+                    <button
+                      onClick={() => toggleReroute('12951')}
+                      className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-blue-950"
+                    >
+                      <Radio className="w-3.5 h-3.5" />
+                      <span>{reroutedTrainIds.includes('12951') ? '✓ Rajdhani 12951 Diverted via Loop' : 'Divert Rajdhani 12951 via Loop 3'}</span>
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => onNavigate('planner')}
+                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <Cpu className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Optimize in AI Planner</span>
+                  </button>
+
+                  <button
+                    onClick={() => onNavigate('safety')}
+                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Safety Validation & Permits</span>
+                  </button>
+                </div>
+
+                {sanctionSuccessMsg && (
+                  <div className="p-2 px-3 rounded-lg bg-emerald-950 border border-emerald-600 text-emerald-300 font-semibold text-xs flex items-center gap-1.5 animate-fadeIn">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{sanctionSuccessMsg}</span>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {/* CARD 2: Selected Train Real-Time GPS Telemetry & Locomotive Diagnostics Card */}
+          {activeInspectorType === 'TRAIN' && selectedTrain && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-blue-950/40 to-slate-950 border border-blue-900/60 space-y-4 shadow-xl">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
+                    <Train className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-base font-extrabold text-white tracking-tight">
+                        {selectedTrain.trainNo} • {selectedTrain.name}
+                      </span>
+                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
+                        {selectedTrain.typeLabel || selectedTrain.type}
+                      </span>
+                      <span
+                        className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                          selectedTrain.signalAspect === 'GREEN'
+                            ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800'
+                            : selectedTrain.signalAspect === 'YELLOW'
+                            ? 'bg-amber-950/80 text-amber-300 border border-amber-800'
+                            : 'bg-yellow-950/80 text-yellow-300 border border-yellow-800'
+                        }`}
+                      >
+                        Aspect: {selectedTrain.signalAspect}
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                      <span>
+                        Track: <strong className="text-cyan-300">{selectedTrain.track}</strong>
+                      </span>
+                      <span>•</span>
+                      <span>
+                        Direction: <strong>{selectedTrain.direction === 'DN' ? 'Down (IGP → BSL)' : 'Up (BSL → IGP)'}</strong>
+                      </span>
+                      <span>•</span>
+                      <span className="text-amber-300 font-medium">
+                        Status: {selectedTrain.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 shrink-0 font-mono">
+                  <div className="text-right">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Live Speed</span>
+                    <span className="text-xl font-bold text-cyan-300">
+                      {selectedTrain.speedKmph} <span className="text-xs text-slate-400">/ {selectedTrain.maxSpeed} km/h</span>
+                    </span>
+                  </div>
+                  <div className="w-px h-8 bg-slate-800" />
+                  <div className="text-right">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Delay</span>
+                    <span className={`text-xl font-bold ${selectedTrain.delayMins === 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {selectedTrain.delayMins === 0 ? '0m (On Time)' : `+${selectedTrain.delayMins}m`}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Telemetry Metrics 6 Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs font-mono">
+                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">CURRENT CHAINAGE</span>
+                  <span className="text-sm font-bold text-white">Km {selectedTrain.currentKm}</span>
+                  <span className="text-[10px] text-slate-500 block mt-0.5">Linear Ref Point</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">NEXT STATION</span>
+                  <span className="text-sm font-bold text-cyan-300 truncate block">{selectedTrain.nextStationCode}</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">{selectedTrain.distToNextKm} km • ETA {selectedTrain.etaNext || '10:45'}</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">LOCOMOTIVE</span>
+                  <span className="text-sm font-bold text-white truncate block">{selectedTrain.locoNo || 'WAP-7 #30455'}</span>
+                  <span className="text-[10px] text-slate-500 block mt-0.5">Electric Shed</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">LOCO PILOT (LP)</span>
+                  <span className="text-sm font-bold text-white truncate block">{selectedTrain.locoPilot || 'Duty Crew'}</span>
+                  <span className="text-[10px] text-slate-500 block mt-0.5">Guard: {selectedTrain.guard || 'Assigned'}</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">TRACTION CURRENT</span>
+                  <span className="text-sm font-bold text-amber-400">{selectedTrain.tractionAmps} A</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">OHE: {selectedTrain.catenaryVoltage} kV</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">COMPOSITION</span>
+                  <span className="text-sm font-bold text-emerald-400">
+                    {selectedTrain.coaches ? `${selectedTrain.coaches} Coaches` : selectedTrain.wagons ? `${selectedTrain.wagons} Wagons` : 'Coaching'}
+                  </span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    {selectedTrain.passengers ? `~${selectedTrain.passengers} Pax` : selectedTrain.tonnage || 'Freight'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* CARD 3: Selected Station Telemetry & Electrical Isolation Card */}
+          {activeInspectorType === 'STATION' && selectedStation && (
+            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-bold text-white">
+                    Station Node: {selectedStation.name} [{selectedStation.code}]
+                  </span>
+                  <span className="text-xs font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                    Chainage: Km {selectedStation.chainageKm}
+                  </span>
+                </div>
+                <span className="text-xs text-slate-400">
+                  {selectedStation.type} • Platforms: {selectedStation.platforms} • Lines: {selectedStation.lines}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                  <span className="text-slate-400 block font-semibold">Traction Substation:</span>
+                  <span className="text-slate-200">
+                    {selectedStation.hasSubstation
+                      ? '25 kV AC Feeding Post Active'
+                      : 'Fed from adjacent sectionalizing post'}
+                  </span>
+                </div>
+                <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                  <span className="text-slate-400 block font-semibold">Interlocking Type:</span>
+                  <span className="text-slate-200">Electronic Interlocking (EI) SIL-4 Dual Standby</span>
+                </div>
+                <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                  <span className="text-slate-400 block font-semibold">Max Section Speed:</span>
+                  <span className="text-emerald-400 font-mono font-bold">130 km/h (Mainline) / 50 km/h (Loop)</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Live Active Trains Manifest Table */}
@@ -933,7 +1255,7 @@ export default function RailwayMapModule({ onNavigate }) {
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-mono">
               {trains.map((train) => {
-                const isSelected = selectedTrain?.trainNo === train.trainNo;
+                const isSelected = activeInspectorType === 'TRAIN' && selectedTrain?.trainNo === train.trainNo;
                 return (
                   <tr
                     key={train.trainNo}
@@ -1031,10 +1353,17 @@ export default function RailwayMapModule({ onNavigate }) {
               return (
                 <div
                   key={cluster.clusterId}
-                  onClick={() => setSelectedCluster(cluster)}
+                  onClick={() => {
+                    setSelectedCluster(cluster);
+                    setActiveInspectorType('CLUSTER');
+                  }}
                   className={`p-4 rounded-xl border transition cursor-pointer ${
                     isSelected
-                      ? 'bg-blue-950/30 border-blue-500 shadow-sm'
+                      ? cluster.clusterId === 'CLUS-02'
+                        ? 'bg-red-950/40 border-red-500 shadow-md shadow-red-950/40'
+                        : cluster.clusterId === 'CLUS-03'
+                        ? 'bg-amber-950/40 border-amber-500 shadow-md shadow-amber-950/40'
+                        : 'bg-blue-950/40 border-blue-500 shadow-md shadow-blue-950/40'
                       : 'bg-slate-950 border-slate-800 hover:border-slate-700'
                   }`}
                 >
